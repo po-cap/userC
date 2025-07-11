@@ -1,7 +1,7 @@
-using System.Net.Http.Headers;
+using System.Net;
 using System.Security.Claims;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -144,25 +144,32 @@ builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
-
-app.UseAuthentication();   // 確認身份
-app.UseAuthorization();    // 確認權限
-
-
-app.MapGet("/api/login/line", () =>
 {
-    return Results.Challenge(
-        new AuthenticationProperties(),
-        new List<string>() { "line" });
-});
+    app.UseAuthentication();   // 確認身份
+    app.UseAuthorization();    // 確認權限
 
-app.MapGet("/api/login/xiao_hong_mao", () =>
-{
-    return Results.Challenge(
-        new AuthenticationProperties(),
-        new List<string>() { "xiao_hong_mao" });
-});
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor   |
+                           ForwardedHeaders.XForwardedHost  | 
+                           ForwardedHeaders.XForwardedProto, 
+        
+        KnownProxies = { IPAddress.Parse("127.0.0.1") }
+    });    
 
-app.Run();
+    app.MapGet("/api/login/line", () =>
+    {
+        return Results.Challenge(
+            new AuthenticationProperties(),
+            new List<string>() { "line" });
+    });
 
+    app.MapGet("/api/login/xiao_hong_mao", () =>
+    {
+        return Results.Challenge(
+            new AuthenticationProperties(),
+            new List<string>() { "xiao_hong_mao" });
+    });
 
+    app.Run();
+}
