@@ -83,9 +83,9 @@ builder.Services.AddAuthentication("cookie")
         o.ClientSecret = "7f859ffaba9cee6c3815e867a89b6d35";
         o.UsePkce      = true;
         
-        o.AuthorizationEndpoint   = "https://localhost:7020/oauth/line/authorize";
-        o.TokenEndpoint           = "https://localhost:7020/oauth/token";
-        o.UserInformationEndpoint = "https://localhost:7020/oauth/information";
+        o.AuthorizationEndpoint   = "https://t8.supojen.com/oauth/line/authorize";
+        o.TokenEndpoint           = "https://t8.supojen.com/oauth/token";
+        o.UserInformationEndpoint = "https://t8.supojen.com/oauth/information";
         
         o.Scope.Clear();
         o.Scope.Add("profile");
