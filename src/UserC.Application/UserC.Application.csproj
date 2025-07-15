@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Po.Media" Version="1.0.14" />
+    <PackageReference Include="Po.Mediator" Version="1.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UserC.Domain\UserC.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

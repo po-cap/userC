@@ -2,6 +2,12 @@ using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
+using Po.Api.Response;
+using Po.Media;
+using Shared.Mediator.Interface;
+using UserC.Application;
+using UserC.Presentation.Contracts;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +24,8 @@ builder.Configuration
 
 
 var OIDC = builder.Configuration["OIDC"];
+
+builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie")
@@ -185,5 +193,14 @@ var app = builder.Build();
 
     app.MapGet("/api/jwt", () => { Results.Ok("Hello Worlds"); }).RequireAuthorization("jwt");
 
+    app.MapPost("/api/image", async (
+        IMediator mediator,
+        [FromForm] UploadImageReq request) =>
+    {
+        using var command = request.ToCommand();
+        var media = await mediator.SendAsync(command);
+        return Results.Ok(media);
+    }).DisableAntiforgery();
+    
     app.Run();
 }
