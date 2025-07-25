@@ -1,12 +1,14 @@
 using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Po.Api.Response;
-using Po.Media;
 using Shared.Mediator.Interface;
 using UserC.Application;
+using UserC.Infrastructure;
 using UserC.Presentation.Contracts;
 
 
@@ -25,7 +27,9 @@ builder.Configuration
 
 var OIDC = builder.Configuration["OIDC"];
 
-builder.Services.AddApplication(builder.Configuration);
+builder.Services
+       .AddApplication(builder.Configuration)
+       .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie")
@@ -148,7 +152,48 @@ builder.Services.AddAuthentication("cookie")
             return ctx.Response.WriteAsJsonAsync(new { });
         };
 
-    });
+    })
+    .AddJwtBearer("jwt", o =>
+    {
+        // Description - 
+        //     告訴 framework，不要把 claim type 變成 Microsoft 自定義的 Type 
+        o.MapInboundClaims = false;
+            
+        // Description - 
+        //     定義 openid 的 endpoint 
+        o.Authority = $"{OIDC}/oauth";
+            
+        // Description - 
+        //     定義 Validate 過程中要 validate 哪些資料
+        o.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+                
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(5),
+            RequireExpirationTime = true
+        };
+            
+            
+        // 啟用詳細錯誤訊息
+        o.IncludeErrorDetails = true;
+        
+        // 事件處理器用於記錄詳細錯誤
+        o.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("Token validated successfully");
+                return Task.CompletedTask;
+            }
+        };
+    });;
 
 builder.Services.AddAuthorization(o =>
 {
@@ -201,6 +246,24 @@ var app = builder.Build();
         var media = await mediator.SendAsync(command);
         return Results.Ok(media);
     }).DisableAntiforgery();
+
+    app.MapPost("/api/item", async (
+        HttpContext ctx,
+        IMediator mediator,
+        AddItemReq req) =>
+    {
+        var userId = ctx.User.FindFirst("sub")?.Value;
+        if (userId == null)
+        {
+            throw Failure.Unauthorized();
+        }
+
+        var command = req.ToCommand(userId);
+
+        var item = await mediator.SendAsync(command);
+
+        return Results.Ok(item);
+    }).RequireAuthorization("jwt");
     
     app.Run();
 }
