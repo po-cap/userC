@@ -12,5 +12,5 @@ public interface IItemFactory
     /// <param name="album">相側</param>
     /// <param name="skus">庫存單元</param>
     /// <returns></returns>
-    Item WithoutSPU(string userId, string description, List<string> album, List<SKU> skus);
+    Item WithoutSPU(long userId, string description, List<string> album, List<SKU> skus);
 }

@@ -12,7 +12,7 @@ public class Item
     /// <summary>
     /// 這個鏈結是哪個用戶發的
     /// </summary>
-    public required string UserId { get; set; }
+    public required long UserId { get; set; }
 
     /// <summary>
     /// 商品 ID

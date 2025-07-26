@@ -15,7 +15,7 @@ public class ItemFactory : IItemFactory
 
 
     public Item WithoutSPU(
-        string userId, 
+        long userId, 
         string description, 
         List<string> album, 
         List<SKU> skus)

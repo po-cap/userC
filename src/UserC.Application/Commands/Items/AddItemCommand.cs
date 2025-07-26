@@ -12,7 +12,7 @@ public class AddItemCommand : IRequest<Item>
     /// <summary>
     /// 商品擁有者
     /// </summary>
-    public string UserId { get; set; }
+    public long UserId { get; set; }
     
     /// <summary>
     /// 商品描述

@@ -1,3 +1,4 @@
+using Po.Api.Response;
 using UserC.Application.Commands.Items;
 using UserC.Application.Models;
 
@@ -23,11 +24,14 @@ public class AddItemReq
 
 public static partial class ContractExtension
 {
-    public static AddItemCommand ToCommand(this AddItemReq request, string userId)
+    public static AddItemCommand ToCommand(this AddItemReq request, string sub)
     {
+        if(!long.TryParse(sub, out long id)) 
+            throw Failure.Unauthorized();
+        
         return new AddItemCommand()
         {
-            UserId = userId,
+            UserId = id,
             Description = request.Description,
             album = request.album,
             Skus = request.Skus
