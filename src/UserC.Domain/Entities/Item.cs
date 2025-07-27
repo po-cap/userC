@@ -8,12 +8,7 @@ public class Item
     /// 連接 ID
     /// </summary>
     public long Id { get; set; }
-
-    /// <summary>
-    /// 這個鏈結是哪個用戶發的
-    /// </summary>
-    public required long UserId { get; set; }
-
+    
     /// <summary>
     /// 商品 ID
     /// </summary>
@@ -63,4 +58,14 @@ public class Item
     /// 庫存
     /// </summary>
     public ICollection<SKU> Skus { get; set; }
+
+    /// <summary>
+    /// 這個鏈結是哪個用戶發的
+    /// </summary>
+    public required long UserId { get; set; }
+    
+    /// <summary>
+    /// 使用者
+    /// </summary>
+    public User User { get; set; }
 }

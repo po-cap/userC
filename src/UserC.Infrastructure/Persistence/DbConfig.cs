@@ -10,7 +10,8 @@ public class DbConfig :
     IEntityTypeConfiguration<Category>,
     IEntityTypeConfiguration<Item>,
     IEntityTypeConfiguration<SKU>,
-    IEntityTypeConfiguration<Inventory>
+    IEntityTypeConfiguration<Inventory>,
+    IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<Brand> builder)
     {
@@ -67,6 +68,7 @@ public class DbConfig :
         builder.Property(x => x.Specs).HasColumnName("spec").HasColumnType("jsonb");
 
         builder.HasMany(x => x.Skus).WithOne().HasForeignKey("item_id");
+        builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
 
     }
     
@@ -93,5 +95,14 @@ public class DbConfig :
         builder.Property(x => x.ReservedStock).HasColumnName("reserved_stock");
         builder.Property(x => x.LowStackThreshold).HasColumnName("low_stock_threshold");
         builder.Property(x => x.LastUpdated).HasColumnName("last_updated");
+    }
+
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.ToTable("users").HasKey(x => x.Id);
+        
+        builder.Property(x => x.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+        builder.Property(x => x.Avatar).HasColumnName("avatar");
+        builder.Property(x => x.DisplayName).HasColumnName("display_name");
     }
 }

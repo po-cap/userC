@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Mediator;
 using UserC.Application.Services;
 using UserC.Domain.Entities;
 using UserC.Domain.Factories;
@@ -41,6 +42,9 @@ public static class DI
         
         // description - repositories
         services.AddScoped<IItemRepository, ItemRepository>();
+        
+        // 注入 mediator
+        services.AddMediator();
         
         return services;
     }

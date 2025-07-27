@@ -9,6 +9,7 @@ using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application;
 using UserC.Infrastructure;
+using UserC.Infrastructure.Queries;
 using UserC.Presentation.Contracts;
 
 
@@ -264,6 +265,22 @@ var app = builder.Build();
 
         return Results.Ok(item);
     }).RequireAuthorization("jwt");
+    
+    app.MapGet("/api/item", async (
+        IMediator mediator,
+        long userId,
+        int size,
+        long? lastId) =>
+    {
+        var query = new GetUserItemsQuery()
+        {
+            UserId = userId,
+            Size = size,
+            LastId = lastId
+        };
+        var items = await mediator.SendAsync(query);
+        return Results.Ok(items);
+    });
     
     app.Run();
 }

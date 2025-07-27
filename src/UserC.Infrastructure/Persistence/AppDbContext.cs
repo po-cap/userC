@@ -22,6 +22,11 @@ public class AppDbContext : DbContext
     /// </summary>
     public DbSet<Item> Items { get; set; }
 
+    /// <summary>
+    /// 使用者
+    /// </summary>
+    public DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var config = new DbConfig();
@@ -30,6 +35,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration<Item>(config);
         modelBuilder.ApplyConfiguration<SKU>(config);
         modelBuilder.ApplyConfiguration<Inventory>(config);
+        modelBuilder.ApplyConfiguration<User>(config);
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
