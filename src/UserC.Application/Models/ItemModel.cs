@@ -1,3 +1,4 @@
+using System.Text.Json;
 using UserC.Domain.Entities;
 
 namespace UserC.Application.Models;
@@ -23,6 +24,11 @@ public class ItemModel
     /// 相簿
     /// </summary>
     public List<string> Album { get; set; }
+
+    /// <summary>
+    /// 規格
+    /// </summary>
+    public JsonDocument Spec { get; set; }
 }
 
 public static partial class ItemExtension 
@@ -34,7 +40,8 @@ public static partial class ItemExtension
             Id = item.Id,
             User = item.User.ToModel(),
             Description = item.Description,
-            Album = item.Albums
+            Album = item.Albums,
+            Spec = item.Specs ?? JsonDocument.Parse("{}")
         };
     }
 }
