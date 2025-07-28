@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Shared.Mediator.Interface;
 using UserC.Application.Models;
 using UserC.Application.Services;
@@ -28,6 +29,11 @@ public class AddItemCommand : IRequest<Item>
     /// 庫存單元
     /// </summary>
     public List<SkuDto> Skus { get; set; }
+    
+    /// <summary>
+    /// 規格（關鍵數性，擴展屬性，或是價錢等等）
+    /// </summary>
+    public JsonDocument Spec { get; set; }
 }
 
 public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
@@ -70,7 +76,8 @@ public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
             userId: request.UserId, 
             description: request.Description, 
             album: request.album,
-            skus: skus);
+            skus: skus,
+            spec: request.Spec);
         
         // processing - 
         _itemRepository.Add(item);

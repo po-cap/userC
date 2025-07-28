@@ -1,3 +1,4 @@
+using System.Text.Json;
 using UserC.Domain.Entities;
 using UserC.Domain.Factories;
 using UserC.Infrastructure.Services;
@@ -18,7 +19,8 @@ public class ItemFactory : IItemFactory
         long userId, 
         string description, 
         List<string> album, 
-        List<SKU> skus)
+        List<SKU> skus,
+        JsonDocument spec)
     {
         return new Item
         {
@@ -27,7 +29,8 @@ public class ItemFactory : IItemFactory
             Description = description,
             Albums = album,
             Skus = skus,
-            IsService = false
+            IsService = false,
+            Specs = spec
         };
     }
 }
