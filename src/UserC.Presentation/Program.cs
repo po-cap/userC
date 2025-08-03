@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -17,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dir    = Environment.GetEnvironmentVariable("ASPNETCORE_DIRECTORY");
 var env    = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") 
-             ?? throw new Exception("Set \"ASPNETCORE_ENVIRONMENT\"");;
+             ?? throw new Exception("Set \"ASPNETCORE_ENVIRONMENT\"");
 
 builder.Configuration
     .SetBasePath(dir ?? Directory.GetCurrentDirectory())
@@ -183,18 +185,29 @@ builder.Services.AddAuthentication("cookie")
         // 事件處理器用於記錄詳細錯誤
         o.Events = new JwtBearerEvents
         {
-            OnAuthenticationFailed = context =>
+            // 當認證失敗時
+            OnChallenge = async context =>
             {
-                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-                return Task.CompletedTask;
+                context.HandleResponse();
+        
+                var problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status401Unauthorized,
+                    Title = "Unauthorized",
+                    Detail = context.ErrorDescription ?? "无效的认证令牌",
+                    Instance = context.Request.Path
+                };
+                
+                var traceId = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
+                problemDetails.Extensions["traceId"] = traceId;
+        
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/problem+json";
+        
+                await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
             },
-            OnTokenValidated = context =>
-            {
-                Console.WriteLine("Token validated successfully");
-                return Task.CompletedTask;
-            }
         };
-    });;
+    });
 
 builder.Services.AddAuthorization(o =>
 {
