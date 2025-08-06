@@ -282,6 +282,7 @@ var app = builder.Build();
     
     app.MapGet("/api/item", async (
         IMediator mediator,
+        List<long>? id,
         long? userId,
         int size,
         long? lastId) =>
@@ -293,6 +294,12 @@ var app = builder.Build();
                 {
                     Size = size,
                     LastId = lastId
+                });
+        else if(id != null)
+            items = await mediator.SendAsync(
+                new GetItemsQuery()
+                {
+                    Ids = id,
                 });
         else
             items = await mediator.SendAsync(
