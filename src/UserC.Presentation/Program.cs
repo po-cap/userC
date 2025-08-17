@@ -284,7 +284,7 @@ var app = builder.Build();
         IMediator mediator,
         long? userId,
         long? id,
-        int size,
+        int? size,
         long? lastId) =>
     {
         if (id != null)
@@ -302,7 +302,7 @@ var app = builder.Build();
             items = await mediator.SendAsync(
                 new GetNewItemsQuery()
                 {
-                    Size = size,
+                    Size = size ?? 20,
                     LastId = lastId
                 });
         else
@@ -310,7 +310,7 @@ var app = builder.Build();
                 new GetUserItemsQuery()
                 {
                     UserId = userId.Value,
-                    Size = size,
+                    Size = size ?? 20,
                     LastId = lastId
                 });
         

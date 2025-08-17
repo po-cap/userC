@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Models;
@@ -21,7 +22,7 @@ public class GetItemHandler : IRequestHandler<GetItemQuery, ItemModel>
 
     public async Task<ItemModel> HandleAsync(GetItemQuery request)
     {
-        var item = await _dbContext.Items.FindAsync(request.ItemId);
+        var item = await _dbContext.Items.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == request.ItemId);
         if(item == null)
             throw Failure.NotFound();
         
