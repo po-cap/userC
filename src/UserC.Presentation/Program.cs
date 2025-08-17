@@ -283,9 +283,20 @@ var app = builder.Build();
     app.MapGet("/api/item", async (
         IMediator mediator,
         long? userId,
+        long? id,
         int size,
         long? lastId) =>
     {
+        if (id != null)
+        {
+            var item = await mediator.SendAsync(
+                new GetItemQuery()
+                {
+                    ItemId = id.Value
+                });
+            return Results.Ok(item);
+        }
+        
         IEnumerable<ItemModel> items;
         if (userId == null)
             items = await mediator.SendAsync(
