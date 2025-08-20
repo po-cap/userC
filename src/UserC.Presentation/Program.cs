@@ -262,6 +262,15 @@ var app = builder.Build();
         return Results.Ok(media);
     }).DisableAntiforgery();
 
+    app.MapPost("/api/video", async (
+        IMediator mediator,
+        [FromForm] UploadVideoReq request) =>
+    {
+        using var command = request.ToCommand();
+        var media = await mediator.SendAsync(command);
+        return Results.Ok(media);
+    }).DisableAntiforgery();
+    
     app.MapPost("/api/item", async (
         HttpContext ctx,
         IMediator mediator,
