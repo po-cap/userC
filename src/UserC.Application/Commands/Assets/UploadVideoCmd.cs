@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+using Po.Api.Response;
 using Po.Media;
 using Shared.Mediator.Interface;
 
@@ -21,25 +23,35 @@ public class UploadVideoCmd: IRequest<Media>, IDisposable
     }
 }
 
-public class UploadVideoHandler : IRequestHandler<UploadImageCmd, Media>
+public class UploadVideoHandler : IRequestHandler<UploadVideoCmd, Media>
 {
     private readonly IMediaService _mediaService;
+    private readonly ILogger<UploadVideoHandler> _logger;
 
-    public UploadVideoHandler(IMediaService mediaService)
+    public UploadVideoHandler(IMediaService mediaService, ILogger<UploadVideoHandler> logger)
     {
         _mediaService = mediaService;
+        _logger = logger;
     }
-
-
-    public async Task<Media> HandleAsync(UploadImageCmd request)
+    
+    public async Task<Media> HandleAsync(UploadVideoCmd request)
     {
-        var media = await _mediaService.UploadAsync(request.File, new UploadOption()
+        try
         {
-            Type = MediaType.mp4,
-            Directory = "videos",
-            Name =  $"tmp/{Guid.NewGuid()}{request.FileExt}"
-        });
+            var media = await _mediaService.UploadAsync(request.File, new UploadOption()
+            {
+                Type = MediaType.mp4,
+                Directory = "videos",
+                Name = $"tmp/{Guid.NewGuid()}{request.FileExt}"
+            });
 
-        return media;
+            return media;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw Failure.BadRequest();
+        }
+        
     }
 }
