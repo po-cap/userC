@@ -2,50 +2,81 @@ using Microsoft.Extensions.Logging;
 using Po.Api.Response;
 using Po.Media;
 using Shared.Mediator.Interface;
+using UserC.Application.Models;
+using UserC.Application.Services;
 
 namespace UserC.Application.Commands.Assets;
 
-public class UploadVideoCmd: IRequest<Media>, IDisposable
+public class UploadVideoCmd: IRequest<VideoModel>, IDisposable
 {
     /// <summary> 
-    /// 照片檔案
+    /// 影片檔案
     /// </summary>
-    public MemoryStream File { get; set; } = new ();
+    public MemoryStream Video { get; set; } = new ();
 
     /// <summary>
-    /// 檔案 extensions
+    /// 封面照
     /// </summary>
-    public required string FileExt { get; set; }
+    public MemoryStream Thumbnail { get; set; } = new();
+
+    /// <summary>
+    /// 影片 extensions
+    /// </summary>
+    public required string VideoFileExt { get; set; }
+    
+    /// <summary>
+    /// 封面照 extensions
+    /// </summary>
+    public required string ThumbnailFileExt { get; set; }
     
     public void Dispose()
     {
-        File.Dispose();
+        Video.Dispose();
+        Thumbnail.Dispose();
     }
 }
 
-public class UploadVideoHandler : IRequestHandler<UploadVideoCmd, Media>
+public class UploadVideoHandler : IRequestHandler<UploadVideoCmd, VideoModel>
 {
+    private readonly Snowflake _snowflake;
     private readonly IMediaService _mediaService;
     private readonly ILogger<UploadVideoHandler> _logger;
 
-    public UploadVideoHandler(IMediaService mediaService, ILogger<UploadVideoHandler> logger)
+    public UploadVideoHandler(
+        Snowflake snowflake, 
+        IMediaService mediaService, 
+        ILogger<UploadVideoHandler> logger)
     {
         _mediaService = mediaService;
         _logger = logger;
+        _snowflake = snowflake;
     }
     
-    public async Task<Media> HandleAsync(UploadVideoCmd request)
+    public async Task<VideoModel> HandleAsync(UploadVideoCmd request)
     {
         try
         {
-            var media = await _mediaService.UploadAsync(request.File, new UploadOption()
+            var id = _snowflake.Get();
+            
+            var videoMedia = await _mediaService.UploadAsync(request.Video, new UploadOption()
             {
                 Type = MediaType.mp4,
                 Directory = "videos",
-                Name = $"tmp/{Guid.NewGuid()}{request.FileExt}"
+                Name = $"tmp/{id}{request.VideoFileExt}"
+            });
+            
+            var thumbnailMedia = await _mediaService.UploadAsync(request.Video, new UploadOption()
+            {
+                Type = MediaType.mp4,
+                Directory = "thumbnails",
+                Name = $"tmp/{id}{request.ThumbnailFileExt}"
             });
 
-            return media;
+            return new VideoModel()
+            {
+                Video = videoMedia,
+                Thumbnail = thumbnailMedia
+            };
         }
         catch (Exception e)
         {

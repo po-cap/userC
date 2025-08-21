@@ -1,6 +1,6 @@
-namespace UserC.Infrastructure.Services;
+namespace UserC.Application.Services;
 
-public class SnowflakeId
+public class Snowflake
 {
     private const long Twepoch = 1288834974657L; // 起始时间戳（2010-11-04 09:42:54.657 UTC）
 
@@ -19,7 +19,7 @@ public class SnowflakeId
     private long _sequence;
     private long _lastTimestamp = -1L;
 
-    public SnowflakeId(long workerId, long datacenterId)
+    public Snowflake(long workerId, long datacenterId)
     {
         if (workerId > MaxWorkerId || workerId < 0)
         {

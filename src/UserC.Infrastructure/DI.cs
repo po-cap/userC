@@ -32,8 +32,8 @@ public static class DI
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         // description - snowflake id
-        services.AddSingleton<SnowflakeId>(provider => 
-            new SnowflakeId(workerId: 1, datacenterId: 1)
+        services.AddSingleton<Snowflake>(provider => 
+            new Snowflake(workerId: 1, datacenterId: 1)
         );
         
         // description - factories

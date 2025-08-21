@@ -1,4 +1,5 @@
 using System.Text.Json;
+using UserC.Application.Services;
 using UserC.Domain.Entities;
 using UserC.Domain.Factories;
 using UserC.Infrastructure.Services;
@@ -7,11 +8,11 @@ namespace UserC.Infrastructure.Factories;
 
 public class ItemFactory : IItemFactory
 {
-    private readonly SnowflakeId _snowflakeId;
+    private readonly Snowflake _snowflake;
 
-    public ItemFactory(SnowflakeId snowflakeId)
+    public ItemFactory(Snowflake snowflake)
     {
-        _snowflakeId = snowflakeId;
+        _snowflake = snowflake;
     }
 
 
@@ -24,7 +25,7 @@ public class ItemFactory : IItemFactory
     {
         return new Item
         {
-            Id = _snowflakeId.Get(),
+            Id = _snowflake.Get(),
             UserId = userId,
             Description = description,
             Albums = album,
