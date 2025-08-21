@@ -24,7 +24,7 @@ public static partial class ContractExtension
         var videoExt = Path.GetExtension(request.Video.FileName);
         
         var thumbnailStream = new MemoryStream();
-        request.Video.CopyTo(videoStream);
+        request.Thumbnail.CopyTo(thumbnailStream);
         var thumbnailExt = Path.GetExtension(request.Thumbnail.FileName);
 
         return new UploadVideoCmd()
