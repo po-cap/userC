@@ -4,8 +4,14 @@ namespace UserC.Presentation.Contracts;
 
 public class UploadVideoReq
 {
+    /// <summary>
+    /// 視頻
+    /// </summary>
     public required IFormFile Video { get; set; }
 
+    /// <summary>
+    /// 封面照
+    /// </summary>
     public required IFormFile Thumbnail { get; set; }
 }
 
