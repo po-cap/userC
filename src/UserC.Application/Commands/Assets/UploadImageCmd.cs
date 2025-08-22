@@ -37,8 +37,8 @@ public class UploadImageHandler : IRequestHandler<UploadImageCmd, Media>
         var media = await _mediaService.UploadAsync(request.File, new UploadOption()
         {
             Type = MediaType.image,
-            Directory = $"{DateTime.Today:yyyy/MM/dd}/images",
-            Name =  $"tmp/{Guid.NewGuid()}{request.FileExt}"
+            Directory = $"{DateTime.Today:yyyy-MM-dd}",
+            Name =  $"image/{Guid.NewGuid()}{request.FileExt}"
         });
 
         return media;
