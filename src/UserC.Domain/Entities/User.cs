@@ -16,4 +16,9 @@ public class User
     /// 使用者名稱
     /// </summary>
     public string DisplayName { get; set; }
+
+    /// <summary>
+    /// 橫幅
+    /// </summary>
+    public string? Banner { get; set; }
 }

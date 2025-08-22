@@ -42,6 +42,7 @@ public static class DI
         
         // description - repositories
         services.AddScoped<IItemRepository, ItemRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         
         // 注入 mediator
         services.AddMediator();

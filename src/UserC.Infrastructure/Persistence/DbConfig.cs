@@ -104,5 +104,6 @@ public class DbConfig :
         builder.Property(x => x.Id).HasColumnName("id").UseIdentityAlwaysColumn();
         builder.Property(x => x.Avatar).HasColumnName("avatar");
         builder.Property(x => x.DisplayName).HasColumnName("display_name");
+        builder.Property(x => x.Banner).HasColumnName("banner");
     }
 }

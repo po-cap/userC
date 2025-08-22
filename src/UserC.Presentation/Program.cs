@@ -237,6 +237,15 @@ var app = builder.Build();
     app.UseAuthentication();   // 確認身份
     app.UseAuthorization();    // 確認權限
     
+    app.MapPut("/api/profile", async (
+        HttpContext context, 
+        IMediator mediator,
+        EditProfileReq request) =>
+    {
+        var response = await mediator.SendAsync(request.ToCommand(context));
+        return Results.Ok(response);
+    });
+    
     app.MapGet("/api/login/line", () =>
     {
         return Results.Challenge(

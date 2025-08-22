@@ -7,17 +7,22 @@ public class UserModel
     /// <summary>
     /// 使用者 ID
     /// </summary>
-    public long Id { get; set; }
+    public required long Id { get; set; }
 
     /// <summary>
     /// 顯示名稱
     /// </summary>
-    public string DisplayName { get; set; }
+    public required string DisplayName { get; set; }
     
     /// <summary>
     /// 頭像
     /// </summary>
-    public string Avatar { get; set; }
+    public required string Avatar { get; set; }
+
+    /// <summary>
+    /// 橫幅
+    /// </summary>
+    public required string? Banner { get; set; }
 }
 
 
@@ -30,7 +35,8 @@ public static partial class UserExtension
         {
             Id = user.Id,
             DisplayName = user.DisplayName,
-            Avatar = user.Avatar
+            Avatar = user.Avatar,
+            Banner = user.Banner
         };
     }
 }
