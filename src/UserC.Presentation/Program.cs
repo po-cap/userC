@@ -244,7 +244,7 @@ var app = builder.Build();
     {
         var response = await mediator.SendAsync(request.ToCommand(context));
         return Results.Ok(response);
-    });
+    }).RequireAuthorization("jwt");
     
     app.MapGet("/api/login/line", () =>
     {
