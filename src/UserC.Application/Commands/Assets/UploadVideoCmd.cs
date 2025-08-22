@@ -61,14 +61,14 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCmd, VideoModel>
             var videoMedia = await _mediaService.UploadAsync(request.Video, new UploadOption()
             {
                 Type = MediaType.mp4,
-                Directory = "videos",
+                Directory = $"{DateTime.Today:yyyy/MM/dd}/videos",
                 Name = $"tmp/{id}{request.VideoFileExt}"
             });
             
             var thumbnailMedia = await _mediaService.UploadAsync(request.Thumbnail, new UploadOption()
             {
                 Type = MediaType.image,
-                Directory = "thumbnails",
+                Directory = $"{DateTime.Today:yyyy/MM/dd}/thumbnails",
                 Name = $"tmp/{id}{request.ThumbnailFileExt}"
             });
 
