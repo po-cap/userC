@@ -297,6 +297,24 @@ var app = builder.Build();
 
         return Results.Ok(item);
     }).RequireAuthorization("jwt");
+
+    
+    app.MapGet("/api/item/{userId:long}", async (
+        IMediator mediator,
+        long userId,
+        int size,
+        long? lastId) =>
+    {
+        var items = await mediator.SendAsync(
+            new GetUserItemsQuery()
+            {
+                UserId = userId,
+                Size = size,
+                LastId = lastId
+            });
+        
+        return Results.Ok(items);
+    });
     
     app.MapGet("/api/item", async (
         IMediator mediator,
