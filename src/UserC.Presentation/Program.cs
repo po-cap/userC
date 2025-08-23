@@ -245,6 +245,18 @@ var app = builder.Build();
         var response = await mediator.SendAsync(request.ToCommand(context));
         return Results.Ok(response);
     }).RequireAuthorization("jwt");
+
+    app.MapGet("/api/profile/{userId:long}", async (
+        IMediator mediator,
+        long userId) =>
+    {
+        var response = await mediator.SendAsync(new GetUserQuery()
+        {
+            UserId = userId
+        });
+        return Results.Ok(response);
+    }).RequireAuthorization("jwt");
+    
     
     app.MapGet("/api/login/line", () =>
     {
