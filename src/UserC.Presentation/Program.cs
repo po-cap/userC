@@ -310,7 +310,7 @@ var app = builder.Build();
         return Results.Ok(item);
     }).RequireAuthorization("jwt");
 
-    app.MapGet("/api/item/{itemId:long}/skus", async (
+    app.MapGet("/api/sku", async (
         IMediator mediator,
         long itemId) =>
     {
@@ -318,9 +318,6 @@ var app = builder.Build();
         {
             ItemId = itemId
         });
-        
-        
-        
         return Results.Ok(skus);
     });
     
