@@ -30,6 +30,21 @@ public class SKU
     public double Price { get; set; }
 
     /// <summary>
+    /// 可用庫存
+    /// </summary>
+    public int AvailableStock { get; set; }
+
+    /// <summary>
+    /// 已分配庫存
+    /// </summary>
+    public int AllocatedStock { get; set; }
+
+    /// <summary>
+    /// Foreign Key - 鏈結 ID
+    /// </summary>
+    public long ItemId { get; set; }
+    
+    /// <summary>
     /// 倉庫
     /// </summary>
     public ICollection<Inventory> Inventories { get; set; }

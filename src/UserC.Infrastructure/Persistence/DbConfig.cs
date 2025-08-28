@@ -67,7 +67,7 @@ public class DbConfig :
         builder.Property(x => x.Albums).HasColumnName("albums");
         builder.Property(x => x.Specs).HasColumnName("spec").HasColumnType("jsonb");
 
-        builder.HasMany(x => x.Skus).WithOne().HasForeignKey("item_id");
+        builder.HasMany(x => x.Skus).WithOne().HasForeignKey(x => x.ItemId);
         builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
 
     }
@@ -81,6 +81,9 @@ public class DbConfig :
         builder.Property(x => x.Photo).HasColumnName("photo");
         builder.Property(x => x.Specs).HasColumnName("specs").HasColumnType("jsonb");
         builder.Property(x => x.Price).HasColumnName("price");
+        builder.Property(x => x.AvailableStock).HasColumnName("available_stock");
+        builder.Property(x => x.AllocatedStock).HasColumnName("allocated_stock");
+        builder.Property(x => x.ItemId).HasColumnName("item_id");
 
         builder.HasMany(x => x.Inventories).WithOne().HasForeignKey("sku_id");
     }

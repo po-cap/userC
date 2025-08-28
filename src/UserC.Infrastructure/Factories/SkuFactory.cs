@@ -30,11 +30,13 @@ public class SkuFactory : ISkuFactory
             Photo = photo,
             Specs = spec,
             Price = price,
-            Inventories = [new Inventory()
-            {
-                Id = _snowflake.Get(),
-                AvailableStock = quantity
-            }]
+            AvailableStock = quantity,
+            AllocatedStock = 0,
+            //Inventories = [new Inventory()
+            //{
+            //    Id = _snowflake.Get(),
+            //    AvailableStock = quantity
+            //}]
         };
         return sku;
     }
