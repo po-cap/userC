@@ -6,6 +6,11 @@ namespace UserC.Application.Models;
 public class SkuModel
 {
     /// <summary>
+    /// ID
+    /// </summary>
+    public required long Id { get; set; }
+    
+    /// <summary>
     /// 名稱
     /// </summary>
     public required string name { get; set; }
@@ -38,6 +43,7 @@ public static partial class ModelConvertor
     {
         return new SkuModel
         {
+            Id = sku.Id,
             name = sku.Name,
             Spec = sku.Specs ?? JsonDocument.Parse("{}"),
             photo = sku.Photo,
