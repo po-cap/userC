@@ -1,16 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.Mediator.Interface;
+using UserC.Application.Models;
 using UserC.Domain.Entities;
 using UserC.Infrastructure.Persistence;
 
 namespace UserC.Infrastructure.Queries;
 
-public class GetItemSkusQuery : IRequest<IEnumerable<SKU>>
+public class GetItemSkusQuery : IRequest<IEnumerable<SkuModel>>
 {
     public long ItemId { get; set; }
 }
 
-public class GetItemSkusHandler : IRequestHandler<GetItemSkusQuery, IEnumerable<SKU>>
+public class GetItemSkusHandler : IRequestHandler<GetItemSkusQuery, IEnumerable<SkuModel>>
 {
     private readonly AppDbContext _dbContext;
 
@@ -20,8 +21,8 @@ public class GetItemSkusHandler : IRequestHandler<GetItemSkusQuery, IEnumerable<
     }
 
 
-    public async Task<IEnumerable<SKU>> HandleAsync(GetItemSkusQuery request)
+    public async Task<IEnumerable<SkuModel>> HandleAsync(GetItemSkusQuery request)
     {
-        return await _dbContext.SKUs.Where(x => x.ItemId == request.ItemId).ToListAsync();
+        return await _dbContext.SKUs.Where(x => x.ItemId == request.ItemId).Select(x => x.ToModel()).ToListAsync();
     }
 }

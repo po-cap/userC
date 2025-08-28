@@ -3,7 +3,7 @@ using UserC.Domain.Entities;
 
 namespace UserC.Application.Models;
 
-public class SkuDto
+public class SkuModel
 {
     /// <summary>
     /// 名稱
@@ -34,9 +34,9 @@ public class SkuDto
 
 public static partial class ModelConvertor
 {
-    public static SkuDto ToModel(this SKU sku)
+    public static SkuModel ToModel(this SKU sku)
     {
-        return new SkuDto
+        return new SkuModel
         {
             name = sku.Name,
             Spec = sku.Specs ?? JsonDocument.Parse("{}"),

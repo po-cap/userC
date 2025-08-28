@@ -20,7 +20,7 @@ public class AddItemReq
     /// <summary>
     /// 庫存單元
     /// </summary>
-    public List<SkuDto> Skus { get; set; }
+    public List<SkuModel> Skus { get; set; }
     
     /// <summary>
     /// 規格（關鍵數性，擴展屬性，或是價錢等等）
