@@ -21,7 +21,8 @@ public class ItemFactory : IItemFactory
         string description, 
         List<string> album, 
         List<SKU> skus,
-        JsonDocument spec)
+        JsonDocument spec,
+        double shippingFee)
     {
         return new Item
         {

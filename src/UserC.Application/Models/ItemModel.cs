@@ -21,6 +21,11 @@ public class ItemModel
     public string? Description { get; set; }
 
     /// <summary>
+    /// 運費
+    /// </summary>
+    public double ShippingFee { get; set; }
+
+    /// <summary>
     /// 相簿
     /// </summary>
     public List<string> Album { get; set; }
@@ -40,6 +45,7 @@ public static partial class ItemExtension
             Id = item.Id,
             User = item.User.ToModel(),
             Description = item.Description,
+            ShippingFee = item.ShippingFee,
             Album = item.Albums,
             Spec = item.Specs ?? JsonDocument.Parse("{}")
         };

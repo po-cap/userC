@@ -19,6 +19,11 @@ public class AddItemCommand : IRequest<Item>
     /// 商品描述
     /// </summary>
     public string Description { get; set; }
+    
+    /// <summary>
+    /// 運費
+    /// </summary>
+    public double ShippingFee { get; set; }
 
     /// <summary>
     /// 相側
@@ -77,7 +82,8 @@ public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
             description: request.Description, 
             album: request.album,
             skus: skus,
-            spec: request.Spec);
+            spec: request.Spec,
+            shippingFee: request.ShippingFee);
         
         // processing - 
         _itemRepository.Add(item);

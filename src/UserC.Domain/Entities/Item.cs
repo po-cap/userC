@@ -48,6 +48,11 @@ public class Item
     /// 相簿
     /// </summary>
     public required List<string> Albums { get; set; }
+
+    /// <summary>
+    /// 運費
+    /// </summary>
+    public double ShippingFee { get; set; }
     
     /// <summary>
     /// 規格

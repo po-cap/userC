@@ -32,6 +32,11 @@ public class AppDbContext : DbContext
     /// </summary>
     public DbSet<User> Users { get; set; }
 
+    /// <summary>
+    /// 交易(訂單)
+    /// </summary>
+    public DbSet<Order> Orders { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var config = new DbConfig();
@@ -41,6 +46,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration<SKU>(config);
         modelBuilder.ApplyConfiguration<Inventory>(config);
         modelBuilder.ApplyConfiguration<User>(config);
+        modelBuilder.ApplyConfiguration<Order>(config);
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

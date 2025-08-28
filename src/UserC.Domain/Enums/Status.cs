@@ -1,4 +1,4 @@
-namespace UserC.Domain.Entities;
+namespace UserC.Domain.Enums;
 
 public enum Status
 {

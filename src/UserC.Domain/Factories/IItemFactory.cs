@@ -13,11 +13,13 @@ public interface IItemFactory
     /// <param name="album">相側</param>
     /// <param name="skus">庫存單元</param>
     /// <param name="spec">規格（價格，關鍵數性，擴展屬性，等等）</param>
+    /// <param name="shippingFee">運費</param>
     /// <returns></returns>
     Item WithoutSPU(
         long userId, 
         string description, 
         List<string> album, 
         List<SKU> skus,
-        JsonDocument spec);
+        JsonDocument spec,
+        double shippingFee);
 }

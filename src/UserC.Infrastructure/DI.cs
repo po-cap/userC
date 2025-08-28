@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Mediator;
 using UserC.Application.Services;
-using UserC.Domain.Entities;
+using UserC.Domain.Enums;
 using UserC.Domain.Factories;
 using UserC.Domain.Repositories;
 using UserC.Infrastructure.Factories;
@@ -25,6 +25,7 @@ public static class DI
             opts.UseNpgsql(config.GetConnectionString("Main"), o =>
             {
                 o.MapEnum<Status>("status");
+                o.MapEnum<OrderStatus>("order_status");
             });
         });
         

@@ -1,3 +1,5 @@
+using UserC.Domain.Enums;
+
 namespace UserC.Domain.Entities;
 
 public class Category

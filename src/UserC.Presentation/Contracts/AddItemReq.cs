@@ -13,6 +13,11 @@ public class AddItemReq
     public string Description { get; set; }
 
     /// <summary>
+    /// 運費
+    /// </summary>
+    public double ShippingFee { get; set; }
+
+    /// <summary>
     /// 相側
     /// </summary>
     public List<string> album { get; set; }
@@ -39,9 +44,10 @@ public static partial class ContractExtension
         {
             UserId = id,
             Description = request.Description,
+            ShippingFee = request.ShippingFee,
             album = request.album,
             Skus = request.Skus,
-            Spec = request.Spec
+            Spec = request.Spec,
         };
     }
 }

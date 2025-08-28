@@ -11,7 +11,8 @@ public class DbConfig :
     IEntityTypeConfiguration<Item>,
     IEntityTypeConfiguration<SKU>,
     IEntityTypeConfiguration<Inventory>,
-    IEntityTypeConfiguration<User>
+    IEntityTypeConfiguration<User>,
+    IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Brand> builder)
     {
@@ -66,10 +67,10 @@ public class DbConfig :
         builder.Property(x => x.IsService).HasColumnName("is_service");
         builder.Property(x => x.Albums).HasColumnName("albums");
         builder.Property(x => x.Specs).HasColumnName("spec").HasColumnType("jsonb");
+        builder.Property(x => x.ShippingFee).HasColumnName("shipping_fee");
 
         builder.HasMany(x => x.Skus).WithOne().HasForeignKey(x => x.ItemId);
         builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
-
     }
     
     public void Configure(EntityTypeBuilder<SKU> builder)
@@ -108,5 +109,52 @@ public class DbConfig :
         builder.Property(x => x.Avatar).HasColumnName("avatar");
         builder.Property(x => x.DisplayName).HasColumnName("display_name");
         builder.Property(x => x.Banner).HasColumnName("banner");
+    }
+
+    public void Configure(EntityTypeBuilder<Order> builder)
+    {
+        builder.ToTable("transactions").HasKey(x => x.Id);
+        
+        builder.Property(x => x.Id).HasColumnName("id");
+        builder.Property(x => x.BuyerId).HasColumnName("buyer_id");
+        builder.Property(x => x.SellerId).HasColumnName("seller_id");
+        builder.HasOne<User>().WithMany().HasForeignKey(x => x.BuyerId);
+        builder.HasOne<User>().WithMany().HasForeignKey(x => x.SellerId);
+
+        builder.Property(x => x.OrderAmount).HasColumnName("order_amount");
+        builder.Property(x => x.DiscountAmount).HasColumnName("discount_amount");
+        builder.Property(x => x.TaxAmount).HasColumnName("tax_amount");
+        builder.Property(x => x.ShippingFee).HasColumnName("shipping_fee");
+        builder.Property(x => x.TotalAmount).HasColumnName("total_amount");
+        
+        builder.Property(x => x.ShippingProvider).HasColumnName("shipping_provider");
+        builder.Property(x => x.TrackingNumber).HasColumnName("tracking_number");
+
+        builder.Property(x => x.BuyerNote).HasColumnName("buyer_note");
+        builder.Property(x => x.SellerNote).HasColumnName("seller_note");
+
+        builder.Property(x => x.Status).HasColumnName("status");
+        builder.Property(x => x.PaidAt).HasColumnName("paid_at");
+        builder.Property(x => x.ShippedAt).HasColumnName("shipped_at");
+        builder.Property(x => x.DeliveredAt).HasColumnName("delivered_at");
+        builder.Property(x => x.CompletedAt).HasColumnName("completed_at");
+        builder.Property(x => x.CancelledAt).HasColumnName("cancelled_at");
+        builder.Property(x => x.RefundAt).HasColumnName("refunded_at");
+        
+        builder.Property(x => x. ItemId).HasColumnName("item_id");
+        builder.HasOne<Item>().WithMany().HasForeignKey(x => x.ItemId);
+        builder.Property(x => x.SkuId).HasColumnName("sku_id");
+        builder.HasOne<SKU>().WithMany().HasForeignKey(x => x.SkuId);
+        builder.Property(x => x.ItemSpec).HasColumnName("item_spec").HasColumnType("jsonb");
+        builder.Property(x => x.SkuSpec).HasColumnName("sku_spec").HasColumnType("jsonb");
+        builder.Property(x => x.quantity).HasColumnName("quantity");
+        
+        
+        builder.Property(x => x. RefundAmount).HasColumnName("refund_amount");
+        builder.Property(x => x. RefundQuantity).HasColumnName("refund_quantity");
+        
+        builder.Property(x => x. RecipientName).HasColumnName("recipient_name");
+        builder.Property(x => x. RecipientPhone).HasColumnName("recipient_phone");
+        builder.Property(x => x. Address).HasColumnName("address");
     }
 }
