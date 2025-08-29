@@ -14,6 +14,8 @@ using UserC.Application.Models;
 using UserC.Infrastructure;
 using UserC.Infrastructure.Queries;
 using UserC.Presentation.Contracts;
+using UserC.Presentation.Contracts.Items;
+using UserC.Presentation.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -373,6 +375,16 @@ var app = builder.Build();
                 });
         
         return Results.Ok(items);
+    });
+
+    app.MapPost("/api/order", async (
+        HttpContext context,
+        IMediator mediator,
+        AddOrderReq request) =>
+    {
+        var userId = context.UserID();
+        var response = await mediator.SendAsync(request.ToCommand(userId));
+        return Results.Ok(response);
     });
     
     app.Run();

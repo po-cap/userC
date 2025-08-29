@@ -60,12 +60,12 @@ public class Order
     /// <summary>
     /// 貨運公司(seven, family, post)
     /// </summary>
-    public string ShippingProvider { get; set; }
+    public string? ShippingProvider { get; set; }
     
     /// <summary>
     /// Tracking Number
     /// </summary>
-    public string TrackingNumber { get; set; }
+    public string? TrackingNumber { get; set; }
     
     #endregion
 
@@ -92,36 +92,41 @@ public class Order
     /// 狀態
     /// </summary>
     public OrderStatus Status { get; set; }
+
+    /// <summary>
+    /// 下單時間
+    /// </summary>
+    public DateTimeOffset OrderAt { get; set; }
     
     /// <summary>
     /// 付款時間
     /// </summary>
-    public DateTimeOffset PaidAt { get; set; }
+    public DateTimeOffset? PaidAt { get; set; }
     
     /// <summary>
     /// 物流取貨時間
     /// </summary>
-    public DateTimeOffset ShippedAt { get; set; }
+    public DateTimeOffset? ShippedAt { get; set; }
     
     /// <summary>
     /// 物流送達時間
     /// </summary>
-    public DateTimeOffset DeliveredAt { get; set; }  
+    public DateTimeOffset? DeliveredAt { get; set; }  
     
     /// <summary>
     /// 訂單完成時間
     /// </summary>
-    public DateTimeOffset CompletedAt { get; set; }
+    public DateTimeOffset? CompletedAt { get; set; }
     
     /// <summary>
     /// 訂單取消時間
     /// </summary>
-    public DateTimeOffset CancelledAt { get; set; }
+    public DateTimeOffset? CancelledAt { get; set; }
     
     /// <summary>
     /// 訂單退款時間
     /// </summary>
-    public DateTimeOffset RefundAt { get; set; }
+    public DateTimeOffset? RefundAt { get; set; }
     
     #endregion
 
@@ -148,11 +153,16 @@ public class Order
     /// SKU 快照
     /// </summary>
     public JsonDocument SkuSpec { get; set; }
+
+    /// <summary>
+    /// 單價
+    /// </summary>
+    public double UnitPrice { get; set; }
     
     /// <summary>
     /// 數量
     /// </summary>
-    public int quantity { get; set; }
+    public int Quantity { get; set; }
     
     #endregion
 

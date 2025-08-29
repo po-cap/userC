@@ -134,6 +134,7 @@ public class DbConfig :
         builder.Property(x => x.SellerNote).HasColumnName("seller_note");
 
         builder.Property(x => x.Status).HasColumnName("status");
+        builder.Property(x => x.OrderAt).HasColumnName("order_at");
         builder.Property(x => x.PaidAt).HasColumnName("paid_at");
         builder.Property(x => x.ShippedAt).HasColumnName("shipped_at");
         builder.Property(x => x.DeliveredAt).HasColumnName("delivered_at");
@@ -147,7 +148,8 @@ public class DbConfig :
         builder.HasOne<SKU>().WithMany().HasForeignKey(x => x.SkuId);
         builder.Property(x => x.ItemSpec).HasColumnName("item_spec").HasColumnType("jsonb");
         builder.Property(x => x.SkuSpec).HasColumnName("sku_spec").HasColumnType("jsonb");
-        builder.Property(x => x.quantity).HasColumnName("quantity");
+        builder.Property(x => x.UnitPrice).HasColumnName("unit_price");
+        builder.Property(x => x.Quantity).HasColumnName("quantity");
         
         
         builder.Property(x => x. RefundAmount).HasColumnName("refund_amount");
