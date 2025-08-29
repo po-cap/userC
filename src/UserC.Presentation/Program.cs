@@ -385,7 +385,7 @@ var app = builder.Build();
         var userId = context.UserID();
         var response = await mediator.SendAsync(request.ToCommand(userId));
         return Results.Ok(response);
-    });
+    }).RequireAuthorization("jwt");
     
     app.Run();
 }

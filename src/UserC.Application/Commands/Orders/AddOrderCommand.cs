@@ -81,9 +81,14 @@ internal class AddOrderHandler : IRequestHandler<AddOrderCommand, OrderModel>
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public AddOrderHandler(IOrderFactory orderFactory)
+    public AddOrderHandler(
+        IOrderFactory orderFactory, 
+        IOrderRepository orderRepository, 
+        IUnitOfWork unitOfWork)
     {
         _orderFactory = orderFactory;
+        _orderRepository = orderRepository;
+        _unitOfWork = unitOfWork;
     }
 
 

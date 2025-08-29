@@ -113,7 +113,7 @@ public class DbConfig :
 
     public void Configure(EntityTypeBuilder<Order> builder)
     {
-        builder.ToTable("transactions").HasKey(x => x.Id);
+        builder.ToTable("orders").HasKey(x => x.Id);
         
         builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.BuyerId).HasColumnName("buyer_id");
