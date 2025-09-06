@@ -131,9 +131,9 @@ public static partial class Convertor
         {
             Id          = entity.Id,
             DisplayName = isBuyer ? entity.Seller.DisplayName : entity.Buyer.DisplayName,
-            Cover       = metadata.GetProperty("display_name").GetString() ?? "",
+            Cover       = metadata.GetProperty("displayName").GetString() ?? "",
             Description = metadata.GetProperty("description").GetString() ?? "",
-            SkuName     = metadata.GetProperty("sku_name").GetString() ?? "",
+            SkuName     = metadata.GetProperty("skuName").GetString() ?? "",
             
             UnitPrice      = entity.Amount.UnitPrice,
             Quantity       = entity.Amount.Quantity,

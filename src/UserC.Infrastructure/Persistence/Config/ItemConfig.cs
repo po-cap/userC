@@ -64,11 +64,14 @@ public class ItemConfig :
     public void Configure(EntityTypeBuilder<SKU> builder)
     {
         builder.ToTable("skus").HasKey(x => x.Id);
-        
+
+        builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.ItemId).HasColumnName("item_id");
         builder.Property(x => x.Name).HasColumnName("name");
         builder.Property(x => x.Metadata).HasColumnName("metadata");
         builder.Property(x => x.Price).HasColumnName("price");
+        builder.Property(x => x.AvailableStock).HasColumnName("available_stock");
+        builder.Property(x => x.AllocatedStock).HasColumnName("allocated_stock");
         
         builder.HasOne<Item>().WithMany(x => x.Skus).HasForeignKey(x => x.ItemId);
     }

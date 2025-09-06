@@ -53,9 +53,9 @@ public static partial class Convertor
             Id          = entity.Id,
             SellerId    = entity.UserId,
             Cover       = metadata.GetProperty("cover").GetString()        ?? "",
-            Description = metadata.GetProperty("description").GetString()  ?? "",
+            Description = entity.Description,
             Price       = metadata.GetProperty("price").GetString()        ?? "",
-            DisplayName = metadata.GetProperty("display_name").GetString() ?? "",
+            DisplayName = metadata.GetProperty("displayName").GetString() ?? "",
             Avatar      = metadata.GetProperty("avatar").GetString()       ?? ""
         };
     }

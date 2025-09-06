@@ -48,7 +48,7 @@ public static partial class Convertor
             DisplayName = isBuyer ? entity.Seller.DisplayName : entity.Buyer.DisplayName,
             Cover = metadata.GetProperty("cover").GetString() ?? "",
             Description = metadata.GetProperty("description").GetString() ?? "",
-            TotalAmount = metadata.GetProperty("total_amount").GetDouble()
+            TotalAmount = metadata.GetProperty("totalAmount").GetDouble()
         };
     }
 }

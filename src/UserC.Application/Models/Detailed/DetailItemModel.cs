@@ -72,7 +72,7 @@ public static partial class Convertor
             Cover       = metadata.GetProperty("cover").GetString()        ?? "",
             Description = entity.Description,
             Price       = metadata.GetProperty("price").GetString()        ?? "",
-            DisplayName = metadata.GetProperty("displayName").GetString()  ?? "",
+            DisplayName = entity.Description,
             Avatar      = metadata.GetProperty("avatar").GetString()       ?? "",
             Assets       = entity.Album.Assets,
             IsVideo     = entity.Album.IsVideo,
