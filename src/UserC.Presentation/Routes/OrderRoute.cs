@@ -11,8 +11,8 @@ public static class OrderRoute
 {
     public static void MapOrder(this WebApplication app)
     {
-        app.MapGet("/api/item", GetAsync).RequireAuthorization("jwt");
-        app.MapPost("/api/item", AddAsync).RequireAuthorization("jwt");
+        app.MapGet("/api/order", GetAsync).RequireAuthorization("jwt");
+        app.MapPost("/api/order", AddAsync).RequireAuthorization("jwt");
     }
     
     
