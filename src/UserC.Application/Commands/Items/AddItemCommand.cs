@@ -3,6 +3,7 @@ using Shared.Mediator.Interface;
 using UserC.Application.Models;
 using UserC.Application.Services;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Items;
 using UserC.Domain.Factories;
 using UserC.Domain.Repositories;
 
@@ -28,7 +29,7 @@ public class AddItemCommand : IRequest<Item>
     /// <summary>
     /// 相側
     /// </summary>
-    public List<string> album { get; set; }
+    public List<string> Assets { get; set; }
 
     /// <summary>
     /// 庫存單元
@@ -38,7 +39,12 @@ public class AddItemCommand : IRequest<Item>
     /// <summary>
     /// 規格（關鍵數性，擴展屬性，或是價錢等等）
     /// </summary>
-    public JsonDocument Spec { get; set; }
+    public JsonDocument Extra { get; set; }
+
+    /// <summary>
+    /// 是否是視頻
+    /// </summary>
+    public bool IsVideo { get; set; }
 }
 
 public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
@@ -69,8 +75,7 @@ public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
         {
             var sku = _skuFactory.Create(
                 name: skuDto.name, 
-                spec: skuDto.Spec, 
-                photo: skuDto.photo, 
+                spec: skuDto.metadata, 
                 price: skuDto.Price,
                 quantity: skuDto.Quantity);
             skus.Add(sku);
@@ -80,10 +85,11 @@ public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
         var item = _itemFactory.WithoutSPU(
             userId: request.UserId, 
             description: request.Description, 
-            album: request.album,
+            album: request.Assets,
             skus: skus,
-            spec: request.Spec,
-            shippingFee: request.ShippingFee);
+            assets: request.Extra,
+            shippingFee: request.ShippingFee,
+            isVideo: request.IsVideo);
         
         // processing - 
         _itemRepository.Add(item);

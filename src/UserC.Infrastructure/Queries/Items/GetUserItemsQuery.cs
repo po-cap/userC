@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.Mediator.Interface;
-using UserC.Application.Models;
-using UserC.Domain.Entities;
+using UserC.Application.Models.Brief;
 using UserC.Infrastructure.Persistence;
 
-namespace UserC.Infrastructure.Queries;
+namespace UserC.Infrastructure.Queries.Items;
 
-public class GetUserItemsQuery : IRequest<List<ItemModel>>
+public class GetUserItemsQuery : IRequest<IEnumerable<BriefItemModel>>
 {
     /// <summary>
     /// 使用者 ID
@@ -26,7 +25,7 @@ public class GetUserItemsQuery : IRequest<List<ItemModel>>
 
 
 
-public class GetUserItemsHandler : IRequestHandler<GetUserItemsQuery, List<ItemModel>>
+public class GetUserItemsHandler : IRequestHandler<GetUserItemsQuery, IEnumerable<BriefItemModel>>
 {
     private readonly AppDbContext _dbContext;
 
@@ -35,16 +34,16 @@ public class GetUserItemsHandler : IRequestHandler<GetUserItemsQuery, List<ItemM
         _dbContext = dbContext;
     }
 
-    public async Task<List<ItemModel>> HandleAsync(GetUserItemsQuery request)
+    public async Task<IEnumerable<BriefItemModel>> HandleAsync(GetUserItemsQuery request)
     {
-        var items = _dbContext.Items.AsQueryable();
-
-        items = items.Where(x => x.UserId == request.UserId)
+        var items = await _dbContext.Items.AsQueryable()
+            .Where(x => x.UserId == request.UserId)
             .OrderByDescending(x => x.Id)
             .Include(x => x.User)
             .Where(x => request.LastId == null || x.Id < request.LastId)
-            .Take(request.Size);
+            .Take(request.Size)
+            .ToListAsync();
 
-        return await (from i in items select i.ToModel()).ToListAsync();
+        return from i in items select i.ToBriefModel();
     }
 }

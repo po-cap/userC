@@ -9,6 +9,16 @@ namespace UserC.Application.Commands.Assets;
 
 public class UploadVideoCmd: IRequest<VideoModel>, IDisposable
 {
+    /// <summary>
+    /// 使用者 ID
+    /// </summary>
+    public long UserId { get; set; }
+    
+    /// <summary>
+    /// 是否是暫時性的
+    /// </summary>
+    public required bool Temporary { get; set; }
+    
     /// <summary> 
     /// 影片檔案
     /// </summary>
@@ -57,19 +67,36 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCmd, VideoModel>
         try
         {
             var id = _snowflake.Get();
+            string directoryForThumbnail, directoryForVideo;
+            string nameForThumbnail, nameForVideo;
+
+            if (request.Temporary)
+            {
+                directoryForThumbnail = $"{DateTime.Today:yyyy-MM-dd}";
+                directoryForVideo = $"{DateTime.Today:yyyy-MM-dd}";
+                nameForThumbnail = $"video/{id}{request.ThumbnailFileExt}";
+                nameForVideo = $"video/{id}{request.VideoFileExt}";
+            }
+            else
+            {
+                directoryForThumbnail = $"video";
+                directoryForVideo = $"video";
+                nameForThumbnail = $"{request.UserId}/{id}{request.ThumbnailFileExt}";
+                nameForVideo = $"{request.UserId}/{id}{request.VideoFileExt}";
+            }
             
             var videoMedia = await _mediaService.UploadAsync(request.Video, new UploadOption()
             {
                 Type = MediaType.mp4,
-                Directory = $"{DateTime.Today:yyyy-MM-dd}",
-                Name = $"videos/{id}{request.VideoFileExt}"
+                Directory = directoryForVideo,
+                Name = nameForVideo
             });
             
             var thumbnailMedia = await _mediaService.UploadAsync(request.Thumbnail, new UploadOption()
             {
                 Type = MediaType.image,
-                Directory = $"{DateTime.Today:yyyy-MM-dd}",
-                Name = $"thumbnails/{id}{request.ThumbnailFileExt}"
+                Directory = directoryForThumbnail,
+                Name = nameForThumbnail
             });
 
             return new VideoModel()

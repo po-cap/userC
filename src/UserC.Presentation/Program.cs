@@ -4,18 +4,13 @@ using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.HttpOverrides; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Po.Api.Response;
-using Shared.Mediator.Interface;
 using UserC.Application;
-using UserC.Application.Models;
 using UserC.Infrastructure;
-using UserC.Infrastructure.Queries;
-using UserC.Presentation.Contracts;
-using UserC.Presentation.Contracts.Items;
-using UserC.Presentation.Utilities;
+using UserC.Presentation.Routes;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +29,7 @@ builder.Configuration
 var OIDC = builder.Configuration["OIDC"];
 
 builder.Services
+       .AddHttpContextAccessor()
        .AddApplication(builder.Configuration)
        .AddInfrastructure(builder.Configuration);
 
@@ -238,154 +234,12 @@ var app = builder.Build();
 
     app.UseAuthentication();   // 確認身份
     app.UseAuthorization();    // 確認權限
-    
-    app.MapPut("/api/profile", async (
-        HttpContext context, 
-        IMediator mediator,
-        EditProfileReq request) =>
-    {
-        var response = await mediator.SendAsync(request.ToCommand(context));
-        return Results.Ok(response);
-    }).RequireAuthorization("jwt");
+    app.UseExceptionHandle();  // 處理 Error 發生時的 Response
 
-    app.MapGet("/api/profile/{userId:long}", async (
-        IMediator mediator,
-        long userId) =>
-    {
-        var response = await mediator.SendAsync(new GetUserQuery()
-        {
-            UserId = userId
-        });
-        return Results.Ok(response);
-    }).RequireAuthorization("jwt");
-    
-    
-    app.MapGet("/api/login/line", () =>
-    {
-        return Results.Challenge(
-            new AuthenticationProperties(),
-            new List<string>() { "line" });
-    });
-
-    app.MapGet("/api/login/xiao_hong_mao", () =>
-    {
-        return Results.Challenge(
-            new AuthenticationProperties(),
-            new List<string>() { "xiao_hong_mao" });
-    });
-
-    app.MapGet("/api/jwt", () => { Results.Ok("Hello Worlds"); }).RequireAuthorization("jwt");
-
-    app.MapPost("/api/image", async (
-        IMediator mediator,
-        [FromForm] UploadImageReq request) =>
-    {
-        using var command = request.ToCommand();
-        var media = await mediator.SendAsync(command);
-        return Results.Ok(media);
-    }).DisableAntiforgery();
-
-    app.MapPost("/api/video", async (
-        IMediator mediator,
-        [FromForm] UploadVideoReq request) =>
-    {
-        using var command = request.ToCommand();
-        var media = await mediator.SendAsync(command);
-        return Results.Ok(media);
-    }).DisableAntiforgery();
-    
-    app.MapPost("/api/item", async (
-        HttpContext ctx,
-        IMediator mediator,
-        AddItemReq req) =>
-    {
-        var userId = ctx.User.FindFirst("sub")?.Value;
-        if (userId == null)
-        {
-            throw Failure.Unauthorized();
-        }
-
-        var command = req.ToCommand(userId);
-
-        var item = await mediator.SendAsync(command);
-
-        return Results.Ok(item);
-    }).RequireAuthorization("jwt");
-
-    app.MapGet("/api/sku", async (
-        IMediator mediator,
-        long itemId) =>
-    {
-        var skus = await mediator.SendAsync(new GetItemSkusQuery()
-        {
-            ItemId = itemId
-        });
-        return Results.Ok(skus);
-    });
-    
-    app.MapGet("/api/item/{userId:long}", async (
-        IMediator mediator,
-        long userId,
-        int size,
-        long? lastId) =>
-    {
-        var items = await mediator.SendAsync(
-            new GetUserItemsQuery()
-            {
-                UserId = userId,
-                Size = size,
-                LastId = lastId
-            });
-        
-        return Results.Ok(items);
-    });
-    
-    app.MapGet("/api/item", async (
-        IMediator mediator,
-        long? userId,
-        long? id,
-        int? size,
-        long? lastId) =>
-    {
-        if (id != null)
-        {
-            var item = await mediator.SendAsync(
-                new GetItemQuery()
-                {
-                    ItemId = id.Value
-                });
-            return Results.Ok(item);
-        }
-        
-        IEnumerable<ItemModel> items;
-        if (userId == null)
-            items = await mediator.SendAsync(
-                new GetNewItemsQuery()
-                {
-                    Size = size ?? 20,
-                    LastId = lastId
-                });
-        else
-            items = await mediator.SendAsync(
-                new GetUserItemsQuery()
-                {
-                    UserId = userId.Value,
-                    Size = size ?? 20,
-                    LastId = lastId
-                });
-        
-        return Results.Ok(items);
-    });
-
-    app.MapPost("/api/order", async (
-        HttpContext context,
-        IMediator mediator,
-        AddOrderReq request) =>
-    {
-        var userId = context.UserID();
-        var response = await mediator.SendAsync(request.ToCommand(userId));
-        return Results.Ok(response);
-    }).RequireAuthorization("jwt");
-    
+    app.MapProfile();          // 用戶資料相關  API
+    app.MapLogin();            // 登入相關 API
+    app.MapAssets();           // 資源相關 API
+    app.MapItem();             // 商品相關 API
+    app.MapOrder();            // 訂單想關 API
     app.Run();
 }

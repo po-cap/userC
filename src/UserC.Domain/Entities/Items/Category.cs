@@ -1,6 +1,4 @@
-using UserC.Domain.Enums;
-
-namespace UserC.Domain.Entities;
+namespace UserC.Domain.Entities.Items;
 
 public class Category
 {
@@ -13,17 +11,7 @@ public class Category
     /// 備註
     /// </summary>
     public required string Name { get; set; }
-
-    /// <summary>
-    /// 類目層級
-    /// </summary>
-    public required string Note { get; set; }
-
-    /// <summary>
-    /// 類目狀態
-    /// </summary>
-    public Status Status { get; set; }
-
+    
     /// <summary>
     /// 狀態
     /// </summary>
@@ -35,6 +23,16 @@ public class Category
     public long? ParentId { get; set; }
 
     /// <summary>
+    /// 建立時間
+    /// </summary>
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+    
+    /// <summary>
+    /// 更新時間
+    /// </summary>
+    public DateTimeOffset? UpdatedAt { get; set; }
+    
+    /// <summary>
     /// 子類別 - Navigation Property
     /// </summary>
     public ICollection<Category> Children { get; set; } = [];
@@ -43,9 +41,5 @@ public class Category
     /// 父類別 - Navigation Property
     /// </summary>
     public Category? Parent { get; set; }
-
-    /// <summary>
-    /// 品牌
-    /// </summary>
-    public ICollection<Brand> Brands { get; set; } = [];
+    
 }

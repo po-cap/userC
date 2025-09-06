@@ -1,5 +1,6 @@
 using System.Text.Json;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Orders;
 
 namespace UserC.Domain.Factories;
 
@@ -15,9 +16,7 @@ public interface IOrderFactory
     /// <param name="discountAmount">折扣價</param>
     /// <param name="shippingFee">運費</param>
     /// <param name="itemId">商品鏈結 ID</param>
-    /// <param name="skuId">庫存單元 ID</param>
-    /// <param name="itemSpec">商品快照</param>
-    /// <param name="skuSpec">庫存單元快照</param>
+    /// <param name="snapshot">快照</param>
     /// <param name="recipientName">收貨者名稱</param>
     /// <param name="recipientPhone">收貨者電話</param>
     /// <param name="address">收貨地址</param>
@@ -30,9 +29,7 @@ public interface IOrderFactory
         double discountAmount,
         double shippingFee,
         long itemId,
-        long skuId,
-        JsonDocument itemSpec,
-        JsonDocument skuSpec,
+        JsonDocument snapshot,
         string recipientName,
         string recipientPhone,
         string address

@@ -1,4 +1,5 @@
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Orders;
 using UserC.Domain.Repositories;
 using UserC.Infrastructure.Persistence;
 

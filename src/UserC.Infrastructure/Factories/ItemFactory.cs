@@ -1,6 +1,7 @@
 using System.Text.Json;
 using UserC.Application.Services;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Items;
 using UserC.Domain.Factories;
 using UserC.Infrastructure.Services;
 
@@ -21,18 +22,24 @@ public class ItemFactory : IItemFactory
         string description, 
         List<string> album, 
         List<SKU> skus,
-        JsonDocument spec,
-        double shippingFee)
+        JsonDocument assets,
+        double shippingFee,
+        bool isVideo)
     {
-        return new Item
+        return new Item()
         {
             Id = _snowflake.Get(),
             UserId = userId,
             Description = description,
-            Albums = album,
-            Skus = skus,
-            IsService = false,
-            Specs = spec
+            ShippingFee = shippingFee,
+            DeListed = false,
+            Extra = assets,
+            Album = new Album()
+            {
+                Assets = album,
+                IsVideo = isVideo
+            },
+            Skus = skus
         };
     }
 }

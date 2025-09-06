@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Items;
+using UserC.Domain.Entities.Orders;
+using UserC.Infrastructure.Persistence.Config;
 
 namespace UserC.Infrastructure.Persistence;
 
@@ -11,11 +14,6 @@ public class AppDbContext : DbContext
     /// 類目
     /// </summary>
     public DbSet<Category> Categories { get; set; }
-    
-    /// <summary>
-    /// 品牌
-    /// </summary>
-    public DbSet<Brand> Brands { get; set; }
     
     /// <summary>
     /// 鏈結
@@ -39,14 +37,21 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var config = new DbConfig();
-        modelBuilder.ApplyConfiguration<Category>(config);
-        modelBuilder.ApplyConfiguration<Brand>(config);
-        modelBuilder.ApplyConfiguration<Item>(config);
-        modelBuilder.ApplyConfiguration<SKU>(config);
-        modelBuilder.ApplyConfiguration<Inventory>(config);
-        modelBuilder.ApplyConfiguration<User>(config);
-        modelBuilder.ApplyConfiguration<Order>(config);
+        var itemConfig = new ItemConfig();
+        modelBuilder.ApplyConfiguration<Category>(itemConfig);
+        modelBuilder.ApplyConfiguration<CAttribute>(itemConfig);
+        modelBuilder.ApplyConfiguration<Item>(itemConfig);
+        modelBuilder.ApplyConfiguration<Album>(itemConfig);
+        modelBuilder.ApplyConfiguration<SKU>(itemConfig);
+        
+        var orderConfig = new OrderConfig();
+        modelBuilder.ApplyConfiguration<Order>(orderConfig);
+        modelBuilder.ApplyConfiguration<OrderAmount>(orderConfig);
+        modelBuilder.ApplyConfiguration<OrderRecord>(orderConfig);
+        modelBuilder.ApplyConfiguration<OrderShipment>(orderConfig);
+
+        var userConfig = new UserConfig();
+        modelBuilder.ApplyConfiguration(userConfig);
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

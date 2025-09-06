@@ -34,21 +34,11 @@ public class AddOrderReq
     /// 商品鏈結 ID
     /// </summary>
     public long ItemId { get; set; }
-
-    /// <summary>
-    /// 庫存單元 ID
-    /// </summary>
-    public long SkuId { get; set; }
-
-    /// <summary>
-    /// 商品快照
-    /// </summary>
-    public JsonDocument Item { get; set; }
-
+    
     /// <summary>
     /// 庫存單元快照
     /// </summary>
-    public JsonDocument Sku { get; set; }
+    public JsonDocument Snapshot { get; set; }
 
     /// <summary>
     /// 收貨者名稱
@@ -79,9 +69,7 @@ public static partial class ContractExtension
             DiscountAmount = request.DiscountAmount,
             ShippingFee    = request.ShippingFee,
             ItemId         = request.ItemId,
-            SkuId          = request.SkuId,
-            Item           = request.Item,
-            Sku            = request.Sku,
+            Snapshot       = request.Snapshot,
             RecipientName  = request.RecipientName,
             RecipientPhone = request.RecipientPhone,
             Address        = request.Address

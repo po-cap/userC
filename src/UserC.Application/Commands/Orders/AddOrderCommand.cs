@@ -1,13 +1,13 @@
 using System.Text.Json;
 using Shared.Mediator.Interface;
-using UserC.Application.Models;
 using UserC.Application.Services;
+using UserC.Domain.Entities.Orders;
 using UserC.Domain.Factories;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class AddOrderCommand : IRequest<OrderModel>
+public class AddOrderCommand : IRequest<Order>
 {
     /// <summary>
     /// 賣家 ID
@@ -43,21 +43,11 @@ public class AddOrderCommand : IRequest<OrderModel>
     /// 商品鏈結 ID
     /// </summary>
     public required long ItemId { get; set; }
-
+    
     /// <summary>
-    /// 庫存單元 ID
+    /// 快照
     /// </summary>
-    public required long SkuId { get; set; }
-
-    /// <summary>
-    /// 商品快照
-    /// </summary>
-    public required JsonDocument Item { get; set; }
-
-    /// <summary>
-    /// 庫存單元快照
-    /// </summary>
-    public required JsonDocument Sku { get; set; }
+    public required JsonDocument Snapshot { get; set; }
 
     /// <summary>
     /// 收貨者名稱
@@ -75,7 +65,7 @@ public class AddOrderCommand : IRequest<OrderModel>
     public required string Address { get; set; }
 }
 
-internal class AddOrderHandler : IRequestHandler<AddOrderCommand, OrderModel>
+internal class AddOrderHandler : IRequestHandler<AddOrderCommand, Order>
 {
     private readonly IOrderFactory _orderFactory;
     private readonly IOrderRepository _orderRepository;
@@ -92,7 +82,7 @@ internal class AddOrderHandler : IRequestHandler<AddOrderCommand, OrderModel>
     }
 
 
-    public async Task<OrderModel> HandleAsync(AddOrderCommand request)
+    public async Task<Order> HandleAsync(AddOrderCommand request)
     {
         var order = _orderFactory.New(
             sellerId:       request.SellerId,
@@ -102,9 +92,7 @@ internal class AddOrderHandler : IRequestHandler<AddOrderCommand, OrderModel>
             discountAmount: request.DiscountAmount,
             shippingFee:    request.ShippingFee,
             itemId:         request.ItemId,
-            skuId:          request.SkuId,
-            itemSpec:       request.Item,
-            skuSpec:        request.Sku,
+            snapshot:       request.Snapshot,
             recipientName:  request.RecipientName,
             recipientPhone: request.RecipientPhone,
             address:        request.Address);
@@ -113,6 +101,6 @@ internal class AddOrderHandler : IRequestHandler<AddOrderCommand, OrderModel>
 
         await _unitOfWork.SaveChangeAsync();
 
-        return order.ToModel();
+        return order;
     }
 }

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Items;
 
 namespace UserC.Application.Models;
 
@@ -18,13 +19,8 @@ public class SkuModel
     /// <summary>
     /// 規格（銷售屬性的規格）
     /// </summary>
-    public required JsonDocument Spec { get; set; }
-
-    /// <summary>
-    /// 照片
-    /// </summary>
-    public required string? photo { get; set; }
-        
+    public required JsonDocument metadata { get; set; }
+    
     /// <summary>
     /// 價錢
     /// </summary>
@@ -45,8 +41,7 @@ public static partial class ModelConvertor
         {
             Id = sku.Id,
             name = sku.Name,
-            Spec = sku.Specs ?? JsonDocument.Parse("{}"),
-            photo = sku.Photo,
+            metadata = sku.Metadata ?? JsonDocument.Parse("{}"),
             Price = sku.Price,
             Quantity = sku.AvailableStock
         };

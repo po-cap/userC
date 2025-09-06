@@ -1,6 +1,7 @@
 using System.Text.Json;
 using UserC.Application.Services;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Orders;
 using UserC.Domain.Enums;
 using UserC.Domain.Factories;
 
@@ -25,9 +26,7 @@ public class OrderFactory : IOrderFactory
     /// <param name="discountAmount">折扣價</param>
     /// <param name="shippingFee">運費</param>
     /// <param name="itemId">商品鏈結 ID</param>
-    /// <param name="skuId">庫存單元 ID</param>
-    /// <param name="itemSpec">商品快照</param>
-    /// <param name="skuSpec">庫存單元快照</param>
+    /// <param name="snapshot">快照</param>
     /// <param name="recipientName">收貨者名稱</param>
     /// <param name="recipientPhone">收貨者電話</param>
     /// <param name="address">收貨地址</param>
@@ -40,9 +39,7 @@ public class OrderFactory : IOrderFactory
         double discountAmount,
         double shippingFee,
         long itemId,
-        long skuId,
-        JsonDocument itemSpec,
-        JsonDocument skuSpec,
+        JsonDocument snapshot,
         string recipientName,
         string recipientPhone,
         string address
@@ -50,49 +47,39 @@ public class OrderFactory : IOrderFactory
     {
         return new Order()
         {
-            // 基本訊息
             Id       = _snowflake.Get(),
             SellerId = sellerId,
             BuyerId  = buyerId,
-            
-            // 金額訊息
-            OrderAmount    = unitPrice * quantity,
-            DiscountAmount = discountAmount,
-            TaxAmount      = 0,
-            ShippingFee    = shippingFee,
-            TotalAmount    = unitPrice * quantity - discountAmount - shippingFee,
-            
-            // 物流訊息
-            ShippingProvider = null,
-            TrackingNumber   = null,
-            
-            // 訂單狀態
-            Status      = OrderStatus.pending_payment,
-            OrderAt     = DateTimeOffset.Now,
-            PaidAt      = null,
-            ShippedAt   = null,
-            DeliveredAt = null,
-            CompletedAt = null,
-            CancelledAt = null,
-            RefundAt    = null,
-            
-            // 商品訊息
-            ItemId    = itemId,
-            SkuId     = skuId,
-            ItemSpec  = itemSpec,
-            SkuSpec   = skuSpec,
-            UnitPrice = unitPrice,
-            Quantity  = quantity,
-            
-            // 退貨訊息
-            RefundAmount   = 0,
-            RefundQuantity = 0,
-            
-            // 收貨訊息
-            RecipientName  = recipientName,
-            RecipientPhone = recipientPhone,
-            Address        = address
-            
+            ItemId = itemId,
+            Status = OrderStatus.pending,
+            Snapshot = snapshot,
+            Amount = new OrderAmount()
+            {
+                UnitPrice = unitPrice,
+                Quantity = quantity,
+                DiscountAmount = discountAmount,
+                ShippingFee = shippingFee,
+                RefundAmount = 0,
+                RefundQuantity = 0
+            },
+            Record = new OrderRecord()
+            {
+                OrderAt = DateTimeOffset.Now,
+                PaidAt = null,
+                ShippedAt = null,
+                DeliveredAt = null,
+                CompletedAt = null,
+                CancelledAt = null,
+                RefundAt = null
+            },
+            Shipment = new OrderShipment()
+            {
+                ShippingProvider = null,
+                TrackingNumber = null,
+                RecipientName = recipientName,
+                RecipientPhone = recipientPhone,
+                Address = address
+            }
         };
     }
 }

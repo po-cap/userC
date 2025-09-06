@@ -1,6 +1,7 @@
 using System.Text.Json;
 using UserC.Application.Services;
 using UserC.Domain.Entities;
+using UserC.Domain.Entities.Items;
 using UserC.Domain.Factories;
 using UserC.Infrastructure.Services;
 
@@ -19,7 +20,6 @@ public class SkuFactory : ISkuFactory
     public SKU Create(
         string name, 
         JsonDocument spec, 
-        string? photo, 
         double price, 
         int quantity)
     {
@@ -27,16 +27,10 @@ public class SkuFactory : ISkuFactory
         {
             Id = _snowflake.Get(),
             Name = name,
-            Photo = photo,
-            Specs = spec,
+            Metadata = spec,
             Price = price,
             AvailableStock = quantity,
             AllocatedStock = 0,
-            //Inventories = [new Inventory()
-            //{
-            //    Id = _snowflake.Get(),
-            //    AvailableStock = quantity
-            //}]
         };
         return sku;
     }

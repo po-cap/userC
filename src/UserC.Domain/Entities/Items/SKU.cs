@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace UserC.Domain.Entities;
+namespace UserC.Domain.Entities.Items;
 
 public class SKU
 {
@@ -13,16 +13,11 @@ public class SKU
     /// 標題
     /// </summary>
     public required string Name { get; set; }
-
-    /// <summary>
-    /// 相簿
-    /// </summary>
-    public string? Photo { get; set; }
     
     /// <summary>
     /// 規格
     /// </summary>
-    public JsonDocument? Specs { get; set; }
+    public JsonDocument Metadata { get; set; }
 
     /// <summary>
     /// 價錢
@@ -43,9 +38,4 @@ public class SKU
     /// Foreign Key - 鏈結 ID
     /// </summary>
     public long ItemId { get; set; }
-    
-    /// <summary>
-    /// 倉庫
-    /// </summary>
-    public ICollection<Inventory> Inventories { get; set; }
 }
