@@ -54,7 +54,7 @@ public class ItemConfig :
 
     public void Configure(EntityTypeBuilder<Album> builder)
     {
-        builder.ToTable("items_album").HasKey(x => x.ItemId);
+        builder.ToTable("items_album");
         
         builder.Property(x => x.ItemId).HasColumnName("item_id");
         builder.Property(x => x.Assets).HasColumnName("assets");
