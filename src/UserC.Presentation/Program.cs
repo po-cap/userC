@@ -241,5 +241,6 @@ var app = builder.Build();
     app.MapAssets();           // 資源相關 API
     app.MapItem();             // 商品相關 API
     app.MapOrder();            // 訂單想關 API
+    app.MapChat();             // 聊天相關 API
     app.Run();
 }
