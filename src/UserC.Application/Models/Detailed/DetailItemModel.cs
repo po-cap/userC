@@ -69,12 +69,12 @@ public static partial class Convertor
         {
             Id          = entity.Id,
             SellerId    = entity.UserId,
-            Cover       = metadata.GetProperty("cover").GetString()        ?? "",
+            Cover       = metadata.GetProperty("cover").GetString() ?? "",
             Description = entity.Description,
-            Price       = metadata.GetProperty("price").GetString()        ?? "",
+            Price       = metadata.GetProperty("price").GetString() ?? "",
             DisplayName = entity.Description,
-            Avatar      = metadata.GetProperty("avatar").GetString()       ?? "",
-            Assets       = entity.Album.Assets,
+            Avatar      = metadata.GetProperty("avatar").GetString() ?? "",
+            Assets      = entity.Album.Assets,
             IsVideo     = entity.Album.IsVideo,
             Skus        = from sku in entity.Skus select sku.ToModel(),
             ShippingFee = entity.ShippingFee

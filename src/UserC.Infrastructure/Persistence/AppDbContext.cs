@@ -21,6 +21,11 @@ public class AppDbContext : DbContext
     public DbSet<Item> Items { get; set; }
 
     /// <summary>
+    /// 相簿
+    /// </summary>
+    public DbSet<Album> Albums { get; set; }
+
+    /// <summary>
     /// 庫存單元
     /// </summary>
     public DbSet<SKU> SKUs { get; set; }

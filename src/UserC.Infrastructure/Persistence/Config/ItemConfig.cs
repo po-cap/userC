@@ -48,13 +48,14 @@ public class ItemConfig :
         builder.Property(x => x.Extra).HasColumnName("extra").HasColumnType("jsonb");
         builder.Property(x => x.ShippingFee).HasColumnName("shipping_fee");
         
+        
         builder.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId);
         builder.HasOne<Album>(x => x.Album).WithOne().HasForeignKey<Album>(x => x.ItemId);
     }
 
     public void Configure(EntityTypeBuilder<Album> builder)
     {
-        builder.ToTable("items_album");
+        builder.ToTable("items_album").HasKey(x => x.ItemId);
         
         builder.Property(x => x.ItemId).HasColumnName("item_id");
         builder.Property(x => x.Assets).HasColumnName("assets");

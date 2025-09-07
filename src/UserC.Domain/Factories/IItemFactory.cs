@@ -17,7 +17,7 @@ public interface IItemFactory
     /// <param name="shippingFee">運費</param>
     /// <param name="isVideo">Assets 是否為 video</param>
     /// <returns></returns>
-    Item WithoutSPU(
+    Item New(
         long userId, 
         string description, 
         List<string> album, 

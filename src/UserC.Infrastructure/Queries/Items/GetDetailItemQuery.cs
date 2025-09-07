@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Models.Detailed;
+using UserC.Domain.Entities.Items;
 using UserC.Infrastructure.Persistence;
 
 namespace UserC.Infrastructure.Queries.Items;
@@ -25,8 +26,25 @@ public class GetDetailItemHandler : IRequestHandler<GetDetailItemQuery, DetailIt
 
     public async Task<DetailItemModel> HandleAsync(GetDetailItemQuery request)
     {
+        //var result = await (
+        //    from i in _dbContext.Items.Include(x => x.Skus)
+        //    join a in _dbContext.Albums on i.Id equals a.ItemId
+        //    where i.Id == request.ItemId
+        //    select new { Item = i, Album = a }
+        //    ).FirstOrDefaultAsync();
+        //
+        //if(result == null)
+        //    throw Failure.NotFound();
+        //
+        //result.Item.Album = result.Album;
+        //
+        //return result.Item.ToDetailModel();
+        ////from i in _dbContext.Items.Include(x => x.Skus)
+        ////    join album in _dbContext.Albums on album.ItemId equals i.Id;
+        
+        
         var item = await _dbContext.Items
-            .Include(x => x.User)
+            .Include(x => x.Album)
             .Include(x => x.Skus)
             .FirstOrDefaultAsync(x => x.Id == request.ItemId);
         if(item == null)

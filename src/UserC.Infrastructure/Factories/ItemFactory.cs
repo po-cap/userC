@@ -17,7 +17,7 @@ public class ItemFactory : IItemFactory
     }
 
 
-    public Item WithoutSPU(
+    public Item New(
         long userId, 
         string description, 
         List<string> album, 
@@ -26,9 +26,11 @@ public class ItemFactory : IItemFactory
         double shippingFee,
         bool isVideo)
     {
+        var id = _snowflake.Get();
+        
         return new Item()
         {
-            Id = _snowflake.Get(),
+            Id = id,
             UserId = userId,
             Description = description,
             ShippingFee = shippingFee,
@@ -36,6 +38,7 @@ public class ItemFactory : IItemFactory
             Extra = assets,
             Album = new Album()
             {
+                ItemId = id,
                 Assets = album,
                 IsVideo = isVideo
             },

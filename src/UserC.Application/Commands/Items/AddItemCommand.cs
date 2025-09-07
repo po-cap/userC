@@ -82,7 +82,7 @@ public class AddItemHandler : IRequestHandler<AddItemCommand, Item>
         }
 
         // processing - 
-        var item = _itemFactory.WithoutSPU(
+        var item = _itemFactory.New(
             userId: request.UserId, 
             description: request.Description, 
             album: request.Assets,
