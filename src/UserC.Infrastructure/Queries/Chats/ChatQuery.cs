@@ -28,9 +28,9 @@ public class ChatHandler : IRequestHandler<ChatQuery, ChatModel>
       
         
         var el = request.Uri.Split("/");
-        if(long.TryParse(el[0], out var buyerId)) 
+        if(!long.TryParse(el[0], out var buyerId)) 
             throw Failure.BadRequest();
-        if(long.TryParse(el[1], out var itemId)) 
+        if(!long.TryParse(el[1], out var itemId)) 
             throw Failure.BadRequest();
 
         bool fromBuyer;  
