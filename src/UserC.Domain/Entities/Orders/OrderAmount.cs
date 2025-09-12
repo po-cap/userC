@@ -31,11 +31,6 @@ public class OrderAmount
     public double ShippingFee { get; set; }
     
     /// <summary>
-    /// 總價
-    /// </summary>
-    public double TotalAmount { get; set; }
-    
-    /// <summary>
     /// 退款金額
     /// </summary>
     public double RefundAmount { get; set; }

@@ -131,7 +131,7 @@ public static partial class Convertor
         {
             Id          = entity.Id,
             DisplayName = isBuyer ? entity.Seller.DisplayName : entity.Buyer.DisplayName,
-            Cover       = metadata.GetProperty("displayName").GetString() ?? "",
+            Cover       = metadata.GetProperty("cover").GetString() ?? "",
             Description = metadata.GetProperty("description").GetString() ?? "",
             SkuName     = metadata.GetProperty("skuName").GetString() ?? "",
             
@@ -139,7 +139,7 @@ public static partial class Convertor
             Quantity       = entity.Amount.Quantity,
             DiscountAmount = entity.Amount.DiscountAmount,
             ShippingFee    = entity.Amount.ShippingFee,
-            TotalAmount    = entity.Amount.TotalAmount,
+            TotalAmount = metadata.GetProperty("totalAmount").GetDouble(),
             
             OrderAt     = entity.Record.OrderAt,
             PaidAt      = entity.Record.PaidAt,

@@ -66,7 +66,7 @@ public class OrderConfig :
         builder.Property(x => x.DeliveredAt).HasColumnName("delivered_at");
         builder.Property(x => x.CompletedAt).HasColumnName("completed_at");
         builder.Property(x => x.CancelledAt).HasColumnName("cancelled_at");
-        builder.Property(x => x.RefundAt).HasColumnName("refund_at");
+        builder.Property(x => x.RefundAt).HasColumnName("refunded_at");
     }
 
     public void Configure(EntityTypeBuilder<OrderShipment> builder)
