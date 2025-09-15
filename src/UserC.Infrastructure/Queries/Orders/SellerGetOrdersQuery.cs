@@ -30,6 +30,8 @@ public class SellerGetOrdersHandler : IRequestHandler<SellerGetOrdersQuery, IEnu
     public async  Task<IEnumerable<BriefOrderModel>> HandleAsync(SellerGetOrdersQuery request)
     {
         var items = await _dbContext.Orders
+            .Include(x => x.Buyer)
+            .Include(x => x.Seller)
             .Where((x) => (request.IsBuyer ? x.BuyerId == request.UserId : x.SellerId == request.UserId) && 
                           x.Id > (request.LastId?? 0)) 
             .OrderByDescending(x => x.Id)

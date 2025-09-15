@@ -29,7 +29,7 @@ public static class OrderRoute
     private static async Task<IResult> GetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        int size,
+        int? size,
         bool isBuyer,
         long? lastId)
     {
@@ -39,7 +39,7 @@ public static class OrderRoute
         {
             UserId = userId,
             IsBuyer = isBuyer,
-            Size = size,
+            Size = size ?? 10,
             LastId = lastId,
         });
         return Results.Ok(orders);
