@@ -89,12 +89,15 @@ public class OrderConfig :
             v => (PaymentMethod)v  // smallint -> enum
             );
         
-        builder.ToTable("payment_records");
+        builder.ToTable("payment_records").HasKey(x => x.OrderId);
 
-        builder.Property(x => x.BankAccount);
-        builder.Property(x => x.QrCodeImage);
-        builder.Property(x => x.ConfirmImage);
-        builder.Property(x => x.Method).HasConversion(methodConverter).HasColumnName("smallint");
-        builder.Property(x => x.PaidAt);
+        builder.Property(x => x.OrderId).HasColumnName("order_id");
+        builder.Property(x => x.BankAccount).HasColumnName("bank_account");
+        builder.Property(x => x.QrCodeImage).HasColumnName("qr_code_image");
+        builder.Property(x => x.ConfirmImage).HasColumnName("confirm_image");
+        builder.Property(x => x.Method).HasConversion(methodConverter)
+            .HasColumnName("smallint")
+            .HasColumnName("method");
+        builder.Property(x => x.PaidAt).HasColumnName("paid_at");
     }
 }

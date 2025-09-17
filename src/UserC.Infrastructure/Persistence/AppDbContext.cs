@@ -40,6 +40,11 @@ public class AppDbContext : DbContext
     /// </summary>
     public DbSet<Order> Orders { get; set; }
 
+    /// <summary>
+    /// 付款資訊
+    /// </summary>
+    public DbSet<Payment> Payments { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var itemConfig = new ItemConfig();
@@ -54,6 +59,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration<OrderAmount>(orderConfig);
         modelBuilder.ApplyConfiguration<OrderRecord>(orderConfig);
         modelBuilder.ApplyConfiguration<OrderShipment>(orderConfig);
+        modelBuilder.ApplyConfiguration<Payment>(orderConfig);
 
         var userConfig = new UserConfig();
         modelBuilder.ApplyConfiguration(userConfig);
