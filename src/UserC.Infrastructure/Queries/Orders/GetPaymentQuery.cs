@@ -43,6 +43,9 @@ public class GetPaymentHandler : IRequestHandler<GetPaymentQuery, Payment>
             {
                 OrderId = request.OrderId
             };
+
+            _dbContext.Payments.Add(payment);
+            await _dbContext.SaveChangesAsync();
         }
 
         return payment;
