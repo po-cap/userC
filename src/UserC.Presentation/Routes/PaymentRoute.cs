@@ -4,6 +4,7 @@ using Shared.Mediator.Interface;
 using UserC.Application.Commands.Orders;
 using UserC.Domain.Entities.Orders;
 using UserC.Infrastructure.Queries.Orders;
+using UserC.Presentation.Contracts.Orders;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Routes;
@@ -21,27 +22,27 @@ public static class PaymentRoute
     private static async Task<IResult> ConfirmAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]ConfirmPaymentCommand command)
+        [FromBody]ConfirmPaymentReq request)
     {
-        await mediator.SendAsync(command);
+        await mediator.SendAsync(request.ToCommand(context));
         return Results.Ok();
     }
     
     private static async Task<IResult> PayAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]PayCommand command)
+        [FromBody]PayReq request)
     {
-        await mediator.SendAsync(command);
+        await mediator.SendAsync(request.ToCommand(context));
         return Results.Ok();
     }  
     
     private static async Task<IResult> SetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]SetPaymentCommand command)
+        [FromBody]SetPaymentReq request)
     {
-        await mediator.SendAsync(command);
+        await mediator.SendAsync(request.ToCommand(context));
         return Results.Ok();
     }
 
