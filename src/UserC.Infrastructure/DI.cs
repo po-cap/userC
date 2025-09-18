@@ -33,7 +33,7 @@ public static class DI
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         // description - snowflake id
-        services.AddSingleton<Snowflake>(provider => 
+        services.AddSingleton<Snowflake>(_ => 
             new Snowflake(workerId: 1, datacenterId: 1)
         );
         
@@ -46,6 +46,7 @@ public static class DI
         services.AddScoped<IItemRepository, ItemRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
         
         // 注入 mediator
         services.AddMediator();
