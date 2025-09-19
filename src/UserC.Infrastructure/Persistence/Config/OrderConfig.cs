@@ -92,12 +92,14 @@ public class OrderConfig :
         builder.ToTable("payment_records").HasKey(x => x.OrderId);
 
         builder.Property(x => x.OrderId).HasColumnName("order_id");
+        builder.Property(x => x.BankName).HasColumnName("bank_name");
+        builder.Property(x => x.BankCode).HasColumnName("bank_code");
         builder.Property(x => x.BankAccount).HasColumnName("bank_account");
         builder.Property(x => x.QrCodeImage).HasColumnName("qr_code_image");
         builder.Property(x => x.ConfirmImage).HasColumnName("confirm_image");
         builder.Property(x => x.Method).HasConversion(methodConverter)
-            .HasColumnName("smallint")
-            .HasColumnName("method");
+               .HasColumnName("smallint")
+               .HasColumnName("method");
         builder.Property(x => x.PaidAt).HasColumnName("paid_at");
         builder.Property(x => x.Confirm).HasColumnName("confirm");
     }

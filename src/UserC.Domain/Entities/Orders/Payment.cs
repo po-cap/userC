@@ -8,6 +8,16 @@ public class Payment
     /// 交易 ID
     /// </summary>
     public long OrderId { get; set; }
+
+    /// <summary>
+    /// 收款銀行名稱
+    /// </summary>
+    public string? BankName { get; set; }
+    
+    /// <summary>
+    /// 收款銀行代碼
+    /// </summary>
+    public string? BankCode { get; set; }
     
     /// <summary>
     /// 收款銀行帳戶

@@ -4,7 +4,7 @@ using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Contracts.Orders;
 
-public class SetPaymentReq
+public class SetPayoutDetailRequest
 {
     /// <summary>
     /// 匯款帳戶
@@ -15,12 +15,22 @@ public class SetPaymentReq
     /// 收款碼
     /// </summary>
     public string? QrCodeImage { get; set; }
+    
+    /// <summary>
+    /// 銀行名稱
+    /// </summary>
+    public string? BankName { get; set; }
+    
+    /// <summary>
+    /// 銀行代碼
+    /// </summary>
+    public string? BankCode { get; set; }
 }
 
 public static partial class ContractExtension
 {
-    public static SetPaymentCommand ToCommand(
-        this SetPaymentReq req,
+    public static SetPayoutDetailCommand ToCommand(
+        this SetPayoutDetailRequest req,
         IHttpContextAccessor accessor)
     {
         var ctx = accessor.HttpContext;
@@ -30,10 +40,12 @@ public static partial class ContractExtension
         {
             if (long.TryParse(idValue, out long id))
             {
-                return new SetPaymentCommand()
+                return new SetPayoutDetailCommand()
                 {
                     OrderId = id,
                     UserId = ctx.UserID(),
+                    BankName = req.BankName,
+                    BankCode = req.BankCode,
                     BankAccount = req.BankAccount,
                     QrCodeImage = req.QrCodeImage,
                 };

@@ -40,7 +40,7 @@ public static class PaymentRoute
     private static async Task<IResult> SetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]SetPaymentReq request)
+        [FromBody]SetPayoutDetailRequest request)
     {
         await mediator.SendAsync(request.ToCommand(context));
         return Results.Ok();

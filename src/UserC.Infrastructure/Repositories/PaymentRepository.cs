@@ -19,11 +19,15 @@ public class PaymentRepository : IPaymentRepository
     /// </summary>
     /// <param name="orderId"></param>
     /// <param name="userId"></param>
+    /// <param name="bankName"></param>
+    /// <param name="bankCode"></param> 
     /// <param name="bankAccount"></param>
     /// <param name="qrCodeImage"></param>
     public async Task EditAccountAsync(
         long orderId, 
         long userId, 
+        string? bankName,
+        string? bankCode,
         string? bankAccount, 
         string? qrCodeImage)
     {
@@ -35,6 +39,8 @@ public class PaymentRepository : IPaymentRepository
         var payment = await _dbContext.Payments.FindAsync(orderId);
         if(payment == null) throw Failure.NotFound();
 
+        payment.BankName    = bankName;
+        payment.BankCode    = bankCode;
         payment.BankAccount = bankAccount;
         payment.QrCodeImage = qrCodeImage;
     }

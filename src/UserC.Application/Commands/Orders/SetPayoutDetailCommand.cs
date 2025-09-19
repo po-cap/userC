@@ -4,7 +4,7 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class SetPaymentCommand : IRequest<bool>
+public class SetPayoutDetailCommand : IRequest<bool>
 {
     /// <summary>
     /// 訂單 ID
@@ -17,6 +17,16 @@ public class SetPaymentCommand : IRequest<bool>
     public long UserId { get; set; }
 
     /// <summary>
+    /// 銀行名稱
+    /// </summary>
+    public string? BankName { get; set; }
+    
+    /// <summary>
+    /// 銀行代碼
+    /// </summary>
+    public string? BankCode { get; set; }
+
+    /// <summary>
     /// 匯款帳戶
     /// </summary>
     public string? BankAccount { get; set; }
@@ -27,12 +37,12 @@ public class SetPaymentCommand : IRequest<bool>
     public string? QrCodeImage { get; set; }
 }
 
-public class SetPaymentHandler : IRequestHandler<SetPaymentCommand, bool>
+public class SetPayoutDetailHandler : IRequestHandler<SetPayoutDetailCommand, bool>
 {
     private readonly IPaymentRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public SetPaymentHandler(
+    public SetPayoutDetailHandler(
         IPaymentRepository repository, 
         IUnitOfWork unitOfWork)
     {
@@ -41,13 +51,15 @@ public class SetPaymentHandler : IRequestHandler<SetPaymentCommand, bool>
     }
 
 
-    public async Task<bool> HandleAsync(SetPaymentCommand request)
+    public async Task<bool> HandleAsync(SetPayoutDetailCommand request)
     {
         try
         {
             await _repository.EditAccountAsync(
                 orderId: request.OrderId,
                 userId: request.UserId,
+                bankName: request.BankName,
+                bankCode: request.BankCode,
                 bankAccount: request.BankAccount,
                 qrCodeImage: request.QrCodeImage);
 

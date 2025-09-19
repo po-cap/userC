@@ -10,11 +10,15 @@ public interface IPaymentRepository
     /// </summary>
     /// <param name="orderId"></param>
     /// <param name="userId"></param>
+    /// <param name="bankName"></param>
+    /// <param name="bankCode"></param> 
     /// <param name="bankAccount"></param>
     /// <param name="qrCodeImage"></param>
     Task EditAccountAsync(
         long orderId, 
         long userId, 
+        string? bankName,
+        string? bankCode,
         string? bankAccount, 
         string? qrCodeImage);
 
