@@ -11,11 +11,6 @@ public class PayReq
     /// 付款證明截圖
     /// </summary>
     public string? ConfirmImage { get; set; }
-
-    /// <summary>
-    /// 付款方式
-    /// </summary>
-    public PaymentMethod Method { get; set; }
 }
 
 public static partial class ContractExtension
@@ -36,7 +31,6 @@ public static partial class ContractExtension
                     OrderId = id,
                     UserId = ctx.UserID(),
                     ConfirmImage = req.ConfirmImage,
-                    Method = req.Method,
                 };
             } 
         }

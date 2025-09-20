@@ -1,5 +1,6 @@
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
+using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
@@ -35,6 +36,11 @@ public class SetPayoutDetailCommand : IRequest<bool>
     /// 收款碼
     /// </summary>
     public string? QrCodeImage { get; set; }
+
+    /// <summary>
+    /// 付款方式
+    /// </summary>
+    public PaymentMethod Method { get; set; }
 }
 
 public class SetPayoutDetailHandler : IRequestHandler<SetPayoutDetailCommand, bool>
@@ -61,7 +67,8 @@ public class SetPayoutDetailHandler : IRequestHandler<SetPayoutDetailCommand, bo
                 bankName: request.BankName,
                 bankCode: request.BankCode,
                 bankAccount: request.BankAccount,
-                qrCodeImage: request.QrCodeImage);
+                qrCodeImage: request.QrCodeImage,
+                method: request.Method);
 
             await _unitOfWork.SaveChangeAsync();
             

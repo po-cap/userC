@@ -14,13 +14,15 @@ public interface IPaymentRepository
     /// <param name="bankCode"></param> 
     /// <param name="bankAccount"></param>
     /// <param name="qrCodeImage"></param>
+    /// <param name="method"></param>
     Task EditAccountAsync(
         long orderId, 
         long userId, 
         string? bankName,
         string? bankCode,
         string? bankAccount, 
-        string? qrCodeImage);
+        string? qrCodeImage,
+        PaymentMethod method);
 
     /// <summary>
     /// 買家付款
@@ -28,12 +30,10 @@ public interface IPaymentRepository
     /// <param name="orderId"></param>
     /// <param name="userId"></param>
     /// <param name="confirmImage"></param>
-    /// <param name="method"></param>
     Task PayAsync(
         long orderId, 
         long userId, 
-        string? confirmImage, 
-        PaymentMethod method);
+        string? confirmImage);
     
     /// <summary>
     /// 賣家確認傷到款項

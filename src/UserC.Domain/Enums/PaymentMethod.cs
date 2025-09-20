@@ -8,17 +8,12 @@ public enum PaymentMethod : short
     cash = 0,
     
     /// <summary>
-    /// 台灣 Pay
+    /// 付款碼
     /// </summary>
-    taiwan_pay = 1,
-    
-    /// <summary>
-    /// 街口支付
-    /// </summary>
-    jko_pay = 2,
+    qr_code = 1,
     
     /// <summary>
     /// 銀行轉帳
     /// </summary>
-    bank_transfer = 3,
+    bank_transfer = 2,
 }

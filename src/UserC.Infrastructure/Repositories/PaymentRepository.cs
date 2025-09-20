@@ -23,13 +23,15 @@ public class PaymentRepository : IPaymentRepository
     /// <param name="bankCode"></param> 
     /// <param name="bankAccount"></param>
     /// <param name="qrCodeImage"></param>
+    /// <param name="method"></param>
     public async Task EditAccountAsync(
         long orderId, 
         long userId, 
         string? bankName,
         string? bankCode,
         string? bankAccount, 
-        string? qrCodeImage)
+        string? qrCodeImage,
+        PaymentMethod method)
     {
         var order = await _dbContext.Orders.FindAsync(orderId);
         if(order == null) throw Failure.NotFound();
@@ -43,6 +45,7 @@ public class PaymentRepository : IPaymentRepository
         payment.BankCode    = bankCode;
         payment.BankAccount = bankAccount;
         payment.QrCodeImage = qrCodeImage;
+        payment.Method = method;
     }
 
     /// <summary>
@@ -51,12 +54,10 @@ public class PaymentRepository : IPaymentRepository
     /// <param name="orderId"></param>
     /// <param name="userId"></param>
     /// <param name="confirmImage"></param>
-    /// <param name="method"></param>
     public async Task PayAsync(
         long orderId, 
         long userId, 
-        string? confirmImage, 
-        PaymentMethod method)
+        string? confirmImage)
     {
         var order = await _dbContext.Orders.FindAsync(orderId);
         if(order == null) throw Failure.NotFound();
@@ -67,7 +68,6 @@ public class PaymentRepository : IPaymentRepository
         if(payment == null) throw Failure.NotFound();
 
         payment.ConfirmImage = confirmImage;
-        payment.Method = method;
     }
 
     /// <summary>

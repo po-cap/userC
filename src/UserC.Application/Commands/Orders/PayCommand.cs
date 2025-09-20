@@ -1,6 +1,5 @@
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
-using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
@@ -21,11 +20,6 @@ public class PayCommand : IRequest<bool>
     /// 付款證明截圖
     /// </summary>
     public string? ConfirmImage { get; set; }
-
-    /// <summary>
-    /// 付款方式
-    /// </summary>
-    public PaymentMethod Method { get; set; }
 }
 
 public class PayHandler : IRequestHandler<PayCommand, bool>
@@ -46,8 +40,7 @@ public class PayHandler : IRequestHandler<PayCommand, bool>
             await _repository.PayAsync(
                 orderId: request.OrderId,
                 userId: request.UserId,
-                confirmImage: request.ConfirmImage,
-                method: request.Method);
+                confirmImage: request.ConfirmImage);
 
             await _unitOfWork.SaveChangeAsync();
             

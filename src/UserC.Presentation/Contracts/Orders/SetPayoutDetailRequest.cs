@@ -1,5 +1,6 @@
 using Po.Api.Response;
 using UserC.Application.Commands.Orders;
+using UserC.Domain.Enums;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Contracts.Orders;
@@ -25,6 +26,11 @@ public class SetPayoutDetailRequest
     /// 銀行代碼
     /// </summary>
     public string? BankCode { get; set; }
+
+    /// <summary>
+    /// 付款方式
+    /// </summary>
+    public PaymentMethod Method { get; set; }
 }
 
 public static partial class ContractExtension
@@ -48,6 +54,7 @@ public static partial class ContractExtension
                     BankCode = req.BankCode,
                     BankAccount = req.BankAccount,
                     QrCodeImage = req.QrCodeImage,
+                    Method = req.Method
                 };
             } 
         }
