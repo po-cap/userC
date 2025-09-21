@@ -33,12 +33,13 @@ public static class OrderRoute
         var response = await mediator.SendAsync(request.ToCommand(userId));
         return Results.Ok(response);
     }
-
+    
     /// <summary>
     /// 搜尋購買記錄
     /// </summary>
     /// <param name="context"></param>
     /// <param name="mediator"></param>
+    /// <param name="id">訂單 ID，如果這不為空，代表要訂單細節</param>
     /// <param name="size"></param>
     /// <param name="isBuyer"></param>
     /// <param name="lastId"></param>
@@ -48,21 +49,37 @@ public static class OrderRoute
     private static async Task<IResult> GetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
+        long? id,
         int? size,
         bool isBuyer,
         long? lastId,
         OrderStatus? status)
     {
         var userId = context.HttpContext?.UserID() ?? throw Failure.BadRequest();
-        
-        var orders = await mediator.SendAsync(new SellerGetOrdersQuery
+
+        if (id != null)
         {
-            UserId = userId,
-            IsBuyer = isBuyer,
-            Size = size ?? 10,
-            LastId = lastId,
-            Status = status
-        });
-        return Results.Ok(orders);
+            var order = await mediator.SendAsync(new GetOrderDetailQuery()
+            {
+                OrderId = id.Value,
+                UserId = userId,
+                IsBuyer = isBuyer
+            });
+
+            return Results.Ok(order);
+        }
+        else
+        {
+            var orders = await mediator.SendAsync(new GetOrdersQuery
+            {
+                UserId = userId,
+                IsBuyer = isBuyer,
+                Size = size ?? 10,
+                LastId = lastId,
+                Status = status
+            });
+            return Results.Ok(orders);    
+        }
+        
     }
 }

@@ -7,7 +7,7 @@ using UserC.Infrastructure.Persistence;
 
 namespace UserC.Infrastructure.Queries.Orders;
 
-public class SellerGetOrdersQuery : IRequest<IEnumerable<BriefOrderModel>>
+public class GetOrdersQuery : IRequest<IEnumerable<BriefOrderModel>>
 {
     public long UserId { get; set; }
 
@@ -21,16 +21,16 @@ public class SellerGetOrdersQuery : IRequest<IEnumerable<BriefOrderModel>>
 }
 
 
-public class SellerGetOrdersHandler : IRequestHandler<SellerGetOrdersQuery, IEnumerable<BriefOrderModel>>
+public class GetOrdersHandler : IRequestHandler<GetOrdersQuery, IEnumerable<BriefOrderModel>>
 {
     private readonly AppDbContext _dbContext;
 
-    public SellerGetOrdersHandler(AppDbContext dbContext)
+    public GetOrdersHandler(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async  Task<IEnumerable<BriefOrderModel>> HandleAsync(SellerGetOrdersQuery request)
+    public async  Task<IEnumerable<BriefOrderModel>> HandleAsync(GetOrdersQuery request)
     {
         var queryable = _dbContext.Orders
             .Include(x => x.Buyer)
