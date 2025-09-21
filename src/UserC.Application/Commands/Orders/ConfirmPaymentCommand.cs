@@ -19,10 +19,12 @@ public class ConfirmPaymentCommand : IRequest<bool>
 
 public class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand, bool>
 {
-    private readonly IPaymentRepository _repository;
+    private readonly IOrderRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ConfirmPaymentHandler(IPaymentRepository repository, IUnitOfWork unitOfWork)
+    public ConfirmPaymentHandler(
+        IOrderRepository repository,
+        IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
@@ -33,10 +35,9 @@ public class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand, bool
     {
         try
         {
-            await _repository.ConfirmAsync(
-                orderId: request.OrderId,
-                userId: request.UserId);
-
+            // 設定為已付款
+            await _repository.MarkAsPaid(request.OrderId);
+            
             await _unitOfWork.SaveChangeAsync();
             
             return true;

@@ -34,11 +34,4 @@ public interface IPaymentRepository
         long orderId, 
         long userId, 
         string? confirmImage);
-    
-    /// <summary>
-    /// 賣家確認傷到款項
-    /// </summary>
-    /// <param name="orderId"></param>
-    /// <param name="userId"></param>
-    Task ConfirmAsync(long orderId, long userId);
 }

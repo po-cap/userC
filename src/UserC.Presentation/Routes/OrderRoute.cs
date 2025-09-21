@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
+using UserC.Domain.Enums;
 using UserC.Infrastructure.Queries.Orders;
 using UserC.Presentation.Contracts.Items;
 using UserC.Presentation.Utilities;
@@ -15,7 +16,14 @@ public static class OrderRoute
         app.MapPost("/api/order", AddAsync).RequireAuthorization("jwt");
     }
     
-    
+    /// <summary>
+    /// 增加一筆購買記錄
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <exception cref="Failure"></exception>
     private static async Task<IResult> AddAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
@@ -26,12 +34,24 @@ public static class OrderRoute
         return Results.Ok(response);
     }
 
+    /// <summary>
+    /// 搜尋購買記錄
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="size"></param>
+    /// <param name="isBuyer"></param>
+    /// <param name="lastId"></param>
+    /// <param name="status">訂單狀態</param>
+    /// <returns></returns>
+    /// <exception cref="Failure"></exception>
     private static async Task<IResult> GetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
         int? size,
         bool isBuyer,
-        long? lastId)
+        long? lastId,
+        OrderStatus? status)
     {
         var userId = context.HttpContext?.UserID() ?? throw Failure.BadRequest();
         
@@ -41,6 +61,7 @@ public static class OrderRoute
             IsBuyer = isBuyer,
             Size = size ?? 10,
             LastId = lastId,
+            Status = status
         });
         return Results.Ok(orders);
     }

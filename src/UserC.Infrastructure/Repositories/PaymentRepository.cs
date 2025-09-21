@@ -69,22 +69,4 @@ public class PaymentRepository : IPaymentRepository
 
         payment.ConfirmImage = confirmImage;
     }
-
-    /// <summary>
-    /// 賣家確認傷到款項
-    /// </summary>
-    /// <param name="orderId"></param>
-    /// <param name="userId"></param>
-    public async Task ConfirmAsync(long orderId, long userId)
-    {
-        var order = await _dbContext.Orders.FindAsync(orderId);
-        if(order == null) throw Failure.NotFound();
-        
-        if(order.SellerId != userId) throw Failure.Unauthorized();
-        
-        var payment = await _dbContext.Payments.FindAsync(orderId);
-        if(payment == null) throw Failure.NotFound();
-
-        payment.Confirm = true;
-    }
 }

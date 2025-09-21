@@ -101,6 +101,5 @@ public class OrderConfig :
                .HasColumnName("smallint")
                .HasColumnName("method");
         builder.Property(x => x.PaidAt).HasColumnName("paid_at");
-        builder.Property(x => x.Confirm).HasColumnName("confirm");
     }
 }

@@ -43,9 +43,4 @@ public class Payment
     /// 付款時間（也就是上傳確認付款 Image 的時間）
     /// </summary>
     public DateTimeOffset? PaidAt { get; set; }
-    
-    /// <summary>
-    /// 賣家確認已收到款項
-    /// </summary>
-    public bool Confirm { get; set; }
 }
