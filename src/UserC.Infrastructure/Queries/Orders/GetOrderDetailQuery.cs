@@ -38,6 +38,9 @@ public class GetOrderDetailHandler : IRequestHandler<GetOrderDetailQuery, Detail
         var order = await _dbContext.Orders
             .Include(x => x.Buyer)
             .Include(x => x.Seller)
+            .Include(x => x.Shipment)
+            .Include(x => x.Record)
+            .Include(x => x.Amount)
             .FirstOrDefaultAsync((x) =>
                 request.IsBuyer ? x.BuyerId == request.UserId : x.SellerId == request.UserId);
         
