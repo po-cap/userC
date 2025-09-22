@@ -33,7 +33,7 @@ public class Repository<T> : IRepository<T> where T : class
         }
 
         // 3. 加上條件並執行查詢
-        return await query.FirstOrDefaultAsync(e => EF.Property<long>(e, "id") == id);
+        return await query.FirstOrDefaultAsync(e => EF.Property<long>(e, "Id") == id);
     }
 
     /// <summary>
