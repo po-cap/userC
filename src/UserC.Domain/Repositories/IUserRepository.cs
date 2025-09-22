@@ -2,7 +2,7 @@ using UserC.Domain.Entities;
 
 namespace UserC.Domain.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<User>
 {
-    Task<User> GetByIdAsync(long id);
+    
 }

@@ -50,6 +50,11 @@ public class Order
     /// Navigation Property - 貨運資訊
     /// </summary>
     public OrderShipment Shipment { get; set; }
+
+    /// <summary>
+    /// Navigation Property - 付款資訊
+    /// </summary>
+    public Payment Payment { get; set; }
     
     /// <summary>
     /// Navigation Property - 買家

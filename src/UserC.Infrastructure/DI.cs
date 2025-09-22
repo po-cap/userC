@@ -38,15 +38,18 @@ public static class DI
         );
         
         // description - factories
-        services.AddScoped<ISkuFactory, SkuFactory>();
-        services.AddScoped<IItemFactory, ItemFactory>();
+        services.AddScoped<ISkuFactory,   SkuFactory>();
+        services.AddScoped<IItemFactory,  ItemFactory>();
         services.AddScoped<IOrderFactory, OrderFactory>();
         
-        // description - repositories
-        services.AddScoped<IItemRepository, ItemRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IPaymentRepository, PaymentRepository>();
+        // description - repositoriesa
+        services.AddScoped<IItemRepository,    ItemRepository>();
+        services.AddScoped<IUserRepository,    UserRepository>();
+        services.AddScoped<IOrderRepository,   OrderRepository>();
+        services.AddScoped<IReviewRepository,  ReviewRepository>();
+        
+        // services
+        services.AddScoped<IAuthorizeUser, AuthorizeUser>();
         
         // 注入 mediator
         services.AddMediator();

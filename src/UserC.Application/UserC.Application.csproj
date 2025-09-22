@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Po.Media" Version="1.0.15" />
     <PackageReference Include="Po.Mediator" Version="1.1.4" />
   </ItemGroup>

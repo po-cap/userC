@@ -1,6 +1,6 @@
 namespace UserC.Domain.Entities.Rating;
 
-public class Reviews
+public class Review
 {
     /// <summary>
     /// ID
@@ -38,7 +38,7 @@ public class Reviews
     /// 2: 不好不壞
     /// 3: 好評
     /// </summary>
-    public int rating { get; set; }
+    public int Rating { get; set; }
 
     /// <summary>
     /// 評價
@@ -50,13 +50,3 @@ public class Reviews
     /// </summary>
     public DateTimeOffset CreatedAt { get; set; }
 }
-
-//id                    bigserial primary key,
-//    user_id               bigint not null references users(id)  on delete set null, -- 被評價的人
-//order_id              bigint not null references orders(id) on delete set null, -- 被評價的商品
-//is_buyer              boolean not null,                                         -- 是否為買家
-//receiver_avatar       text not null,                                        -- 用户头像
-//receiver_display_name text not null ,                                       -- 用户名
-//rating                smallint not null check (rating >= 1 AND rating <= 3),    -- 综合评分，1-3星
-//comment               text,                                                     -- 评价内容
-//created_at            timestamptz default now()                                 -- 評價時間 

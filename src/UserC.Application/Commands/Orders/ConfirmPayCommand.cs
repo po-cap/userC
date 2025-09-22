@@ -1,50 +1,59 @@
+using Microsoft.EntityFrameworkCore;
+using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
+using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class ConfirmPaymentCommand : IRequest<bool>
+/// <summary>
+/// 確認收款
+/// </summary>
+public class ConfirmPayCommand : IRequest
 {
     /// <summary>
     /// 訂單 ID
     /// </summary>
     public long OrderId { get; set; }
-
-    /// <summary>
-    /// 變更者的 ID
-    /// </summary>
-    public long UserId { get; set; }
 }
 
-public class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand, bool>
+public class ConfirmPayHandler : IRequestHandler<ConfirmPayCommand>
 {
-    private readonly IOrderRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IOrderRepository _orderRepository;
+    private readonly IAuthorizeUser _authorizeUser;
 
-    public ConfirmPaymentHandler(
-        IOrderRepository repository,
-        IUnitOfWork unitOfWork)
+    public ConfirmPayHandler(
+        IUnitOfWork unitOfWork, 
+        IOrderRepository orderRepository, 
+        IAuthorizeUser authorizeUser)
     {
-        _repository = repository;
         _unitOfWork = unitOfWork;
+        _orderRepository = orderRepository;
+        _authorizeUser = authorizeUser;
     }
 
 
-    public async Task<bool> HandleAsync(ConfirmPaymentCommand request)
+    public async Task HandleAsync(ConfirmPayCommand request)
     {
-        try
-        {
-            // 設定為已付款
-            await _repository.MarkAsPaidAsync(request.OrderId);
-            
-            await _unitOfWork.SaveChangeAsync();
-            
-            return true;
-        }
-        catch (Exception _)
-        {
-            return false;
-        }
+        //
+        var order = await _orderRepository.GetByIdAsync(
+            request.OrderId,
+            q => q.Include(x => x.Record));
+        if (order == null)
+            throw Failure.NotFound();
+
+        //
+        var userId = _authorizeUser.Id;
+        if (order.SellerId != userId)
+            throw Failure.Unauthorized();
+        
+        //
+        order.Record.PaidAt = DateTimeOffset.Now;
+        order.Status = OrderStatus.paid;
+
+        //
+        await _unitOfWork.SaveChangeAsync();
     }
 }

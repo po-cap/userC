@@ -63,6 +63,9 @@ public class AppDbContext : DbContext
 
         var userConfig = new UserConfig();
         modelBuilder.ApplyConfiguration(userConfig);
+
+        var ratingConfig = new RatingConfig();
+        modelBuilder.ApplyConfiguration(ratingConfig);
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
 using UserC.Domain.Enums;
@@ -5,18 +7,16 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class SetPayoutDetailCommand : IRequest<bool>
+/// <summary>
+/// 設定收款資訊
+/// </summary>
+public class SetPayCommand : IRequest
 {
     /// <summary>
     /// 訂單 ID
     /// </summary>
     public long OrderId { get; set; }
-
-    /// <summary>
-    /// 變更者的 ID
-    /// </summary>
-    public long UserId { get; set; }
-
+    
     /// <summary>
     /// 銀行名稱
     /// </summary>
@@ -43,40 +43,60 @@ public class SetPayoutDetailCommand : IRequest<bool>
     public PaymentMethod Method { get; set; }
 }
 
-public class SetPayoutDetailHandler : IRequestHandler<SetPayoutDetailCommand, bool>
+public class SetPayHandler : IRequestHandler<SetPayCommand>
 {
-    private readonly IPaymentRepository _repository;
+    private readonly IOrderRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
-
-    public SetPayoutDetailHandler(
-        IPaymentRepository repository, 
-        IUnitOfWork unitOfWork)
+    private readonly IAuthorizeUser _authorizeUser;
+    
+    public SetPayHandler(
+        IOrderRepository repository,
+        IUnitOfWork unitOfWork, 
+        IAuthorizeUser authorizeUser)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
+        _authorizeUser = authorizeUser;
     }
 
 
-    public async Task<bool> HandleAsync(SetPayoutDetailCommand request)
+    public async Task HandleAsync(SetPayCommand request)
     {
-        try
-        {
-            await _repository.EditAccountAsync(
-                orderId: request.OrderId,
-                userId: request.UserId,
-                bankName: request.BankName,
-                bankCode: request.BankCode,
-                bankAccount: request.BankAccount,
-                qrCodeImage: request.QrCodeImage,
-                method: request.Method);
+        //
+        var order = await _repository.GetByIdAsync(
+            request.OrderId,
+            q => q.Include(x => x.Payment));
+        if (order == null)
+            throw Failure.NotFound();
 
-            await _unitOfWork.SaveChangeAsync();
-            
-            return true;
-        }
-        catch (Exception _)
+        //
+        var userId = _authorizeUser.Id;
+        if (order.SellerId != userId)
+            throw Failure.Unauthorized();
+
+        //
+        if (request.QrCodeImage == null)
         {
-            return false;
+            if (request.BankName == null ||
+                request.BankCode == null ||
+                request.BankAccount == null)
+            {
+                throw Failure.BadRequest("請填寫完整訊息");
+            }
+
+            order.Payment.BankName = request.BankName;
+            order.Payment.BankCode = request.BankCode;
+            order.Payment.BankAccount = request.BankAccount;
+            order.Payment.Method = PaymentMethod.bank_transfer;
         }
+        //
+        else
+        {
+            order.Payment.QrCodeImage = request.QrCodeImage;
+            order.Payment.Method = PaymentMethod.qr_code;
+        }
+
+        //
+        await _unitOfWork.SaveChangeAsync();
     }
 }
