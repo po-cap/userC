@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
+using UserC.Application.Commands.Orders;
+using UserC.Domain.Entities.Rating;
 using UserC.Domain.Enums;
 using UserC.Infrastructure.Queries.Orders;
 using UserC.Presentation.Contracts.Items;
+using UserC.Presentation.Contracts.Orders;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Routes;
@@ -13,7 +17,46 @@ public static class OrderRoute
     public static void MapOrder(this WebApplication app)
     {
         app.MapGet("/api/order", GetAsync).RequireAuthorization("jwt");
-        app.MapPost("/api/order", AddAsync).RequireAuthorization("jwt");
+        
+        app.MapPost("/api/order",        AddAsync).RequireAuthorization("jwt");
+        app.MapPut( "/api/order/ship",   ShipAsync).RequireAuthorization("jwt");
+        app.MapPut( "/api/order/receive",ReceiveAsync).RequireAuthorization("jwt");
+        app.MapPut( "/api/order/review", ReviewAsync).RequireAuthorization("jwt");
+        
+        
+        app.MapPut("/api/order/cancel", () => { });
+        app.MapPut("/api/order/refund", () => { });
+    }
+
+    /// <summary>
+    /// 使用者對訂單做評價
+    /// </summary>
+    /// <param name="mediator"></param>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private static async Task<IResult> ReviewAsync(
+        [FromServices]IMediator mediator,
+        [FromBody] ReviewCommand command)
+    {
+        var review = await mediator.SendAsync(command);
+        return Results.Ok(review);
+    }
+    
+    /// <summary>
+    /// 買家確認收貨
+    /// </summary>
+    /// <param name="mediator"></param>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
+    private static async Task<IResult> ReceiveAsync(
+        [FromServices]IMediator mediator,
+        [FromQuery]long orderId)
+    {
+        await mediator.SendAsync(new ReceivedCommand()
+        {
+            OrderId = orderId
+        });
+        return Results.Ok();
     }
     
     /// <summary>
@@ -34,6 +77,22 @@ public static class OrderRoute
         return Results.Ok(response);
     }
     
+    /// <summary>
+    /// 設定發貨信息
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    private static async Task<IResult> ShipAsync(        
+        [FromServices]IHttpContextAccessor context,
+        [FromServices]IMediator mediator,
+        [FromBody]SetTrackingNumberRequest request)
+    {
+        await mediator.SendAsync(request.ToCommand(context));
+        return Results.Ok();
+    }
+
     /// <summary>
     /// 搜尋購買記錄
     /// </summary>

@@ -36,7 +36,7 @@ public class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand, bool
         try
         {
             // 設定為已付款
-            await _repository.MarkAsPaid(request.OrderId);
+            await _repository.MarkAsPaidAsync(request.OrderId);
             
             await _unitOfWork.SaveChangeAsync();
             

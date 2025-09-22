@@ -18,34 +18,15 @@ public static class PaymentRoute
         app.MapPut("/api/payment/pay", PayAsync).RequireAuthorization("jwt");
         app.MapPut("/api/payment/confirm", ConfirmAsync).RequireAuthorization("jwt");
     }
-
-    private static async Task<IResult> ConfirmAsync(
-        [FromServices]IHttpContextAccessor context,
-        [FromServices]IMediator mediator,
-        [FromBody]ConfirmPaymentReq request)
-    {
-        await mediator.SendAsync(request.ToCommand(context));
-        return Results.Ok();
-    }
     
-    private static async Task<IResult> PayAsync(
-        [FromServices]IHttpContextAccessor context,
-        [FromServices]IMediator mediator,
-        [FromBody]PayReq request)
-    {
-        await mediator.SendAsync(request.ToCommand(context));
-        return Results.Ok();
-    }  
-    
-    private static async Task<IResult> SetAsync(
-        [FromServices]IHttpContextAccessor context,
-        [FromServices]IMediator mediator,
-        [FromBody]SetPayoutDetailRequest request)
-    {
-        await mediator.SendAsync(request.ToCommand(context));
-        return Results.Ok();
-    }
-
+    /// <summary>
+    /// 取得付款資訊
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
+    /// <exception cref="Failure"></exception>
     private static async Task<IResult> GetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
@@ -61,4 +42,53 @@ public static class PaymentRoute
 
         return Results.Ok(payment);
     }
+    
+    /// <summary>
+    /// 設定收款碼（或帳戶）
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private static async Task<IResult> SetAsync(
+        [FromServices]IHttpContextAccessor context,
+        [FromServices]IMediator mediator,
+        [FromBody]SetPayCommand command)
+    {
+        await mediator.SendAsync(command);
+        return Results.Ok();
+    }
+    
+    /// <summary>
+    /// 付款
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private static async Task<IResult> PayAsync(
+        [FromServices]IHttpContextAccessor context,
+        [FromServices]IMediator mediator,
+        [FromBody]PayCommand command)
+    {
+        await mediator.SendAsync(command);
+        return Results.Ok();
+    }  
+    
+    /// <summary>
+    /// 確認收款
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mediator"></param>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private static async Task<IResult> ConfirmAsync(
+        [FromServices]IHttpContextAccessor context,
+        [FromServices]IMediator mediator,
+        [FromBody]ConfirmPayCommand command)
+    {
+        await mediator.SendAsync(command);
+        return Results.Ok();
+    }
+    
 }

@@ -8,7 +8,7 @@ public class ConfirmPaymentReq;
 
 public static partial class ContractExtension
 {
-    public static ConfirmPaymentCommand ToCommand(
+    public static ConfirmPayCommand ToCommand(
         this ConfirmPaymentReq req,
         IHttpContextAccessor accessor)
     {
@@ -19,10 +19,9 @@ public static partial class ContractExtension
         {
             if (long.TryParse(idValue, out long id))
             {
-                return new ConfirmPaymentCommand()
+                return new ConfirmPayCommand()
                 {
                     OrderId = id,
-                    UserId = ctx.UserID(),
                 };
             } 
         }
