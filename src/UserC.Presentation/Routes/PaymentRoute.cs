@@ -2,9 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Commands.Orders;
-using UserC.Domain.Entities.Orders;
 using UserC.Infrastructure.Queries.Orders;
-using UserC.Presentation.Contracts.Orders;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Routes;
@@ -85,7 +83,7 @@ public static class PaymentRoute
     private static async Task<IResult> ConfirmAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]ConfirmPayCommand command)
+        [AsParameters]ConfirmPayCommand command)
     {
         await mediator.SendAsync(command);
         return Results.Ok();
