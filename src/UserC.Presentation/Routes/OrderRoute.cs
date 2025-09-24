@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Commands.Orders;
+using UserC.Application.Models.Brief;
+using UserC.Application.Models.Detailed;
+using UserC.Application.Queries.Orders;
 using UserC.Domain.Enums;
 using UserC.Infrastructure.Queries.Orders;
 using UserC.Presentation.Contracts.Items;
@@ -103,37 +106,19 @@ public static class OrderRoute
     private static async Task<IResult> GetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        long? id,
-        int? size,
-        bool isBuyer,
-        long? lastId,
-        OrderStatus? status)
+        [AsParameters]OrdersQuery query)
+        //long? id,
+        //int? size,
+        //bool isBuyer,
+        //long? lastId,
+        //OrderStatus? status)
     {
-        var userId = context.HttpContext?.UserID() ?? throw Failure.BadRequest();
-
-        if (id != null)
-        {
-            var order = await mediator.SendAsync(new GetOrderDetailQuery()
-            {
-                OrderId = id.Value,
-                UserId = userId,
-                IsBuyer = isBuyer
-            });
-
-            return Results.Ok(order);
-        }
-        else
-        {
-            var orders = await mediator.SendAsync(new GetOrdersQuery
-            {
-                UserId = userId,
-                IsBuyer = isBuyer,
-                Size = size ?? 10,
-                LastId = lastId,
-                Status = status
-            });
-            return Results.Ok(orders);    
-        }
+        var orders = await mediator.SendAsync(query);
         
+        if (query.Id == null)
+            return Results.Ok(from order in orders select order.ToBriefModel(query.IsBuyer));
+        else
+            return Results.Ok(orders.First().ToDetailModel(query.IsBuyer));
+
     }
 }

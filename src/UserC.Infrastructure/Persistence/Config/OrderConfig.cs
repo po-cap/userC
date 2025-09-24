@@ -34,11 +34,13 @@ public class OrderConfig :
                .HasConversion(statusConverter)
                .HasColumnType("smallint");
         builder.Property(x => x.Snapshot).HasColumnName("snapshot").HasColumnType("jsonb");
+        builder.Property(x => x.ReviewedByBuyer).HasColumnName("reviewed_by_buyer");
+        builder.Property(x => x.ReviewedBySeller).HasColumnName("reviewed_by_seller");
 
         builder.HasOne(x => x.Buyer).WithMany().HasForeignKey(x => x.BuyerId);
         builder.HasOne(x => x.Seller).WithMany().HasForeignKey(x => x.SellerId);
         builder.HasOne(x => x.Item).WithMany().HasForeignKey(x => x.ItemId);
-
+        
         builder.HasOne(x => x.Amount).WithOne().HasForeignKey<OrderAmount>(x => x.OrderId);
         builder.HasOne(x => x.Record).WithOne().HasForeignKey<OrderRecord>(x => x.OrderId);
         builder.HasOne(x => x.Shipment).WithOne().HasForeignKey<OrderShipment>(x => x.OrderId);
@@ -111,7 +113,7 @@ public class OrderConfig :
     {
         builder.ToTable("reviews").HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnName("id");qq
+        builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.UserId).HasColumnName("user_id");
         builder.Property(x => x.OrderId).HasColumnName("order_id");
         builder.Property(x => x.ReviewerAvatar).HasColumnName("reviewer_avatar");

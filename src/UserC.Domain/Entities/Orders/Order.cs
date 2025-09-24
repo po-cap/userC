@@ -39,6 +39,16 @@ public class Order
     public JsonDocument Snapshot { get; set; }
 
     /// <summary>
+    /// 被買家評論過
+    /// </summary>
+    public bool ReviewedByBuyer { get; set; }
+    
+    /// <summary>
+    /// 被賣家評論過
+    /// </summary>
+    public bool ReviewedBySeller { get; set; }
+
+    /// <summary>
     /// Navigation Property - 明細
     /// </summary>
     public OrderAmount Amount { get; set; }
@@ -110,6 +120,11 @@ public class Order
             };
             
             Reviews.Add(review);
+
+            if (isBuyer)
+                ReviewedByBuyer = true;
+            else
+                ReviewedBySeller = true;
         }
         // 修改評論
         else
