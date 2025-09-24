@@ -10,7 +10,6 @@ public class DetailOrderModel
     public required long Id { get; set; }
     
     
-    
     /// <summary>
     /// 對方的名稱
     /// </summary>
@@ -22,10 +21,17 @@ public class DetailOrderModel
     public required string Cover { get; set; }
 
     /// <summary>
+    /// 商品 ID
+    /// </summary>
+    public required long ItemId { get; set; }
+    
+    /// <summary>
     /// 商品簡介
     /// </summary>
     public required string Description { get; set; }
 
+    
+    
     /// <summary>
     /// 庫存單元名稱
     /// </summary>
@@ -130,6 +136,7 @@ public static partial class Convertor
         return new DetailOrderModel
         {
             Id               = entity.Id,
+            ItemId           = entity.ItemId,
             DisplayName      = isBuyer ? entity.Seller.DisplayName : entity.Buyer.DisplayName,
             Cover            = metadata.GetProperty("cover").GetString() ?? "",
             Description      = metadata.GetProperty("description").GetString() ?? "",
