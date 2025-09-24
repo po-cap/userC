@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Commands.Orders;
-using UserC.Domain.Entities.Rating;
 using UserC.Domain.Enums;
 using UserC.Infrastructure.Queries.Orders;
 using UserC.Presentation.Contracts.Items;
-using UserC.Presentation.Contracts.Orders;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Routes;
@@ -46,16 +44,13 @@ public static class OrderRoute
     /// 買家確認收貨
     /// </summary>
     /// <param name="mediator"></param>
-    /// <param name="orderId"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     private static async Task<IResult> ReceiveAsync(
         [FromServices]IMediator mediator,
-        [FromQuery]long orderId)
+        [AsParameters]ReceivedCommand command)
     {
-        await mediator.SendAsync(new ReceivedCommand()
-        {
-            OrderId = orderId
-        });
+        await mediator.SendAsync(command);
         return Results.Ok();
     }
     
@@ -82,14 +77,14 @@ public static class OrderRoute
     /// </summary>
     /// <param name="context"></param>
     /// <param name="mediator"></param>
-    /// <param name="request"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     private static async Task<IResult> ShipAsync(        
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]SetTrackingNumberRequest request)
+        [FromBody]SetTrackingNumberCommand command)
     {
-        await mediator.SendAsync(request.ToCommand(context));
+        await mediator.SendAsync(command);
         return Results.Ok();
     }
 

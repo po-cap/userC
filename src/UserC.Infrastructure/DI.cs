@@ -46,7 +46,6 @@ public static class DI
         services.AddScoped<IItemRepository,    ItemRepository>();
         services.AddScoped<IUserRepository,    UserRepository>();
         services.AddScoped<IOrderRepository,   OrderRepository>();
-        services.AddScoped<IReviewRepository,  ReviewRepository>();
         
         // services
         services.AddScoped<IAuthorizeUser, AuthorizeUser>();

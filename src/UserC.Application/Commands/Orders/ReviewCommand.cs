@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
@@ -28,23 +29,23 @@ public class ReviewCommand : IRequest<Review>
 public class ReviewHandler : IRequestHandler<ReviewCommand, Review>
 {
     private readonly IAuthorizeUser _authorizeUser;
-    private readonly IReviewRepository _reviewRepository;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly Snowflake _snowflake;
 
     public ReviewHandler(
         IAuthorizeUser authorizeUser,
-        IReviewRepository reviewRepository, 
         IOrderRepository orderRepository, 
         IUserRepository userRepository, 
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        Snowflake snowflake)
     {
         _authorizeUser = authorizeUser;
-        _reviewRepository = reviewRepository;
         _orderRepository = orderRepository;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _snowflake = snowflake;
     }
 
     public async Task<Review> HandleAsync(ReviewCommand request)
@@ -55,26 +56,17 @@ public class ReviewHandler : IRequestHandler<ReviewCommand, Review>
         if(user == null) throw Failure.NotFound();
         
         // 取得訂單資料
-        var order = await _orderRepository.GetByIdAsync(request.OrderId);
+        var order = await _orderRepository.GetByIdAsync(
+            request.OrderId,
+            q => q.Include(x => x.Reviews));
         if(order == null) throw Failure.NotFound();
         
-        // 取得
-        var review = await _reviewRepository.AddAsync(
-            order: order, 
-            user: user, 
-            rating: request.Rating, 
+        // 增加評語
+        var review = order.OnReview(
+            id: _snowflake.Get(),
+            user: user,
+            rating: request.Rating,
             comment: request.Comment);
-
-        if ((int)order.Status < 4)
-            throw Failure.BadRequest("貨物必須送達才能評價");
-        
-        // 如果貨物已送達，狀態改為評價中
-        if (order.Status == OrderStatus.delivered)
-            order.Status = OrderStatus.reviewing;
-        
-        // 如果狀態是評價中，改為訂單完成
-        if (order.Status == OrderStatus.reviewing)
-            order.Status = OrderStatus.completed;
         
         // 存檔
         await _unitOfWork.SaveChangeAsync();

@@ -1,5 +1,7 @@
+using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
+using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
@@ -9,11 +11,6 @@ namespace UserC.Application.Commands.Orders;
 /// </summary>
 public class ConfirmReceiptCommand : IRequest
 {
-    /// <summary>
-    /// 發起 command 的使用者的 ID
-    /// </summary>
-    public long UserId { get; set; }
-
     /// <summary>
     /// 訂單編號
     /// </summary>
@@ -32,21 +29,34 @@ public class ConfirmReceiptHandler : IRequestHandler<ConfirmReceiptCommand>
     /// </summary>
     private readonly IUnitOfWork _unitOfWork;
 
+    /// <summary>
+    /// 認證用戶
+    /// </summary>
+    private readonly IAuthorizeUser _authorizeUser;
+
     public ConfirmReceiptHandler(
         IOrderRepository repository, 
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        IAuthorizeUser authorizeUser)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
+        _authorizeUser = authorizeUser;
     }
 
 
     public async Task HandleAsync(ConfirmReceiptCommand request)
     {
-        await _repository.MarkAsDeliveredAsync(
-            id: request.OrderId,
-            userId: request.UserId);
+        var order = await _repository.GetByIdAsync(request.OrderId);
+        if (order == null)
+            throw Failure.NotFound();
 
+        if (order.BuyerId != _authorizeUser.Id)
+            throw Failure.Unauthorized();
+
+        order.Status = OrderStatus.delivered;
+        order.Record.DeliveredAt = DateTimeOffset.Now;
+        
         await _unitOfWork.SaveChangeAsync();
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UserC.Domain.Entities;
 using UserC.Domain.Entities.Items;
 using UserC.Domain.Entities.Orders;
+using UserC.Domain.Entities.Rating;
 using UserC.Infrastructure.Persistence.Config;
 
 namespace UserC.Infrastructure.Persistence;
@@ -60,12 +61,11 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration<OrderRecord>(orderConfig);
         modelBuilder.ApplyConfiguration<OrderShipment>(orderConfig);
         modelBuilder.ApplyConfiguration<Payment>(orderConfig);
+        modelBuilder.ApplyConfiguration<Review>(orderConfig);
 
         var userConfig = new UserConfig();
         modelBuilder.ApplyConfiguration(userConfig);
-
-        var ratingConfig = new RatingConfig();
-        modelBuilder.ApplyConfiguration(ratingConfig);
+        
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

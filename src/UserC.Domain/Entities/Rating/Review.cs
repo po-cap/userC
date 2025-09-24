@@ -1,3 +1,5 @@
+using UserC.Domain.Entities.Orders;
+
 namespace UserC.Domain.Entities.Rating;
 
 public class Review

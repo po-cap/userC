@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserC.Domain.Entities.Orders;
+using UserC.Domain.Entities.Rating;
 using UserC.Domain.Enums;
 
 namespace UserC.Infrastructure.Persistence.Config;
@@ -11,7 +12,8 @@ public class OrderConfig :
     IEntityTypeConfiguration<OrderAmount>,
     IEntityTypeConfiguration<OrderRecord>,
     IEntityTypeConfiguration<OrderShipment>,
-    IEntityTypeConfiguration<Payment>
+    IEntityTypeConfiguration<Payment>,
+    IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
@@ -41,6 +43,7 @@ public class OrderConfig :
         builder.HasOne(x => x.Record).WithOne().HasForeignKey<OrderRecord>(x => x.OrderId);
         builder.HasOne(x => x.Shipment).WithOne().HasForeignKey<OrderShipment>(x => x.OrderId);
         builder.HasOne(x => x.Payment).WithOne().HasForeignKey<Payment>(x => x.OrderId);
+        builder.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.OrderId);
     }
 
     public void Configure(EntityTypeBuilder<OrderAmount> builder)
@@ -102,5 +105,19 @@ public class OrderConfig :
                .HasColumnName("smallint")
                .HasColumnName("method");
         builder.Property(x => x.PaidAt).HasColumnName("paid_at");
+    }
+    
+    public void Configure(EntityTypeBuilder<Review> builder)
+    {
+        builder.ToTable("reviews").HasKey(x => x.Id);
+
+        builder.Property(x => x.Id).HasColumnName("id");qq
+        builder.Property(x => x.UserId).HasColumnName("user_id");
+        builder.Property(x => x.OrderId).HasColumnName("order_id");
+        builder.Property(x => x.ReviewerAvatar).HasColumnName("reviewer_avatar");
+        builder.Property(x => x.ReviewerDisplayName).HasColumnName("reviewer_display_name");
+        builder.Property(x => x.Rating).HasColumnName("rating");
+        builder.Property(x => x.Comment).HasColumnName("comment");
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at");
     }
 }

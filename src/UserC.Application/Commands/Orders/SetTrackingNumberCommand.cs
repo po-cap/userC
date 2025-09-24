@@ -1,17 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Po.Api.Response;
 using Shared.Mediator.Interface;
-using UserC.Application.Models.Detailed;
 using UserC.Application.Services;
+using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
 public class SetTrackingNumberCommand : IRequest
 {
-    /// <summary>
-    /// 使用者 ID
-    /// </summary>
-    public required long UserId { get; set; }
-    
     /// <summary>
     /// 訂單編號
     /// </summary>
@@ -32,23 +29,36 @@ public class SetTrackingNumberHandler : IRequestHandler<SetTrackingNumberCommand
 {
     private readonly IOrderRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuthorizeUser _authorizeUser;
 
     public SetTrackingNumberHandler(
         IOrderRepository repository, 
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        IAuthorizeUser authorizeUser)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
+        _authorizeUser = authorizeUser;
     }
 
 
     public async Task HandleAsync(SetTrackingNumberCommand request)
     {
-        await _repository.MarkAsShippedAsync(
-            id: request.orderId,
-            userId: request.UserId,
-            ShippingProvider: request.ShippingProvider,
-            trackingNumber: request.TrackingNumber);
+        var userId = _authorizeUser.Id;
+
+        var order = await _repository.GetByIdAsync(
+            request.orderId,
+            q => q.Include(x => x.Record).Include(x => x.Shipment));
+        if (order == null)
+            throw Failure.NotFound();
+
+        if (order.SellerId != userId)
+            throw Failure.Unauthorized();
+
+        order.Status = OrderStatus.shipped;
+        order.Record.ShippedAt = DateTimeOffset.Now;
+        order.Shipment.ShippingProvider = request.ShippingProvider;
+        order.Shipment.TrackingNumber = request.TrackingNumber;
 
         await _unitOfWork.SaveChangeAsync();
     }

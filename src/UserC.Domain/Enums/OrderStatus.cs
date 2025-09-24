@@ -28,11 +28,9 @@ public enum OrderStatus : short
     delivered = 4,
     
     /// <summary>
-    /// 評價中，
-    /// 必須兩個人都評價後，訂單才算完成
-    /// 這個狀態表示，還有一人沒有做評價
+    /// 交易完成
     /// </summary>
-    reviewing = 5,
+    completed = 5,
     
     /// <summary>
     /// 已取消
@@ -44,8 +42,4 @@ public enum OrderStatus : short
     /// </summary>
     refunding = 7,
     
-    /// <summary>
-    /// 交易完成
-    /// </summary>
-    completed = 8
 }
