@@ -15,7 +15,7 @@ public class Review
     public long UserId { get; set; }
 
     /// <summary>
-    /// 被評價傷品 ID
+    /// Foreign Key - 被評價傷品 ID
     /// </summary>
     public long OrderId { get; set; }
 

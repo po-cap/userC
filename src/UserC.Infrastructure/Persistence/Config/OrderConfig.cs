@@ -45,6 +45,7 @@ public class OrderConfig :
         builder.HasOne(x => x.Record).WithOne().HasForeignKey<OrderRecord>(x => x.OrderId);
         builder.HasOne(x => x.Shipment).WithOne().HasForeignKey<OrderShipment>(x => x.OrderId);
         builder.HasOne(x => x.Payment).WithOne().HasForeignKey<Payment>(x => x.OrderId);
+        
         builder.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.OrderId);
     }
 

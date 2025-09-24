@@ -86,7 +86,7 @@ public class Order
     /// <summary>
     /// Navigation Property - 評論
     /// </summary>
-    public ICollection<Review> Reviews { get; internal set; }
+    public List<Review> Reviews { get; set; }
     
     /// <summary>
     /// 評論
@@ -102,45 +102,26 @@ public class Order
         
         var isBuyer = BuyerId == user.Id;
 
-        Review review;
-        // 新增評論
-        if (Reviews.Count(x => x.IsBuyer == isBuyer) == 0)
+        var review = new Review()
         {
-            review = new Review()
-            {
-                Id = id,
-                ReviewerAvatar = user.Avatar,
-                ReviewerDisplayName = user.DisplayName,
-                IsBuyer = BuyerId == user.Id,
-                OrderId = Id,
-                UserId = isBuyer ? SellerId : BuyerId,
-                Rating = rating,
-                Comment = comment,
-                CreatedAt = DateTimeOffset.Now
-            };
-            
-            Reviews.Add(review);
+            Id = id,
+            ReviewerAvatar = user.Avatar,
+            ReviewerDisplayName = user.DisplayName,
+            IsBuyer = BuyerId == user.Id,
+            OrderId = Id,
+            UserId = isBuyer ? SellerId : BuyerId,
+            Rating = rating,
+            Comment = comment,
+            CreatedAt = DateTimeOffset.Now
+        };
 
-            if (isBuyer)
-                ReviewedByBuyer = true;
-            else
-                ReviewedBySeller = true;
-        }
-        // 修改評論
+        Reviews.Add(review);
+
+        if (isBuyer)
+            ReviewedByBuyer = true;
         else
-        {
-            review = Reviews.First(x => x.IsBuyer == isBuyer);
-
-            review.Rating = rating;
-            review.Comment = comment;
-        }
-
-        // 是否更改狀態
-        if (Reviews.Count() >= 2)
-        {
-            Status = OrderStatus.completed;
-        }
-
+            ReviewedBySeller = true;
+        
         return review;
     }
 }

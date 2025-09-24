@@ -1,4 +1,6 @@
+using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using UserC.Domain.Repositories;
 using UserC.Infrastructure.Persistence;
 
@@ -13,6 +15,18 @@ public class Repository<T> : IRepository<T> where T : class
     {
         this.context = context;
         _dbSet = context.Set<T>();
+    }
+
+    /// <summary>
+    /// 設定一個 Transaction
+    /// 需要制定 Isolation Level 實在用
+    /// 平常使用 SaveChangeAsync 就好
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
+    public IDbTransaction Begin(IsolationLevel level)
+    {
+        return context.Database.BeginTransaction(level).GetDbTransaction();
     }
 
     /// <summary>
@@ -51,5 +65,15 @@ public class Repository<T> : IRepository<T> where T : class
         }
         
         return await query.ToListAsync();
+    }
+
+    /// <summary>
+    /// 變更被追蹤的 Entity
+    /// </summary>
+    /// <param name="entity">要被變更的實體</param>
+    /// <returns></returns>
+    public virtual async Task SaveChangeAsync(T entity)
+    {
+        await context.SaveChangesAsync();
     }
 }

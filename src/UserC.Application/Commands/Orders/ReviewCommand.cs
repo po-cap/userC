@@ -3,7 +3,6 @@ using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
 using UserC.Domain.Entities.Rating;
-using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
@@ -31,20 +30,17 @@ public class ReviewHandler : IRequestHandler<ReviewCommand, Review>
     private readonly IAuthorizeUser _authorizeUser;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly Snowflake _snowflake;
 
     public ReviewHandler(
         IAuthorizeUser authorizeUser,
         IOrderRepository orderRepository, 
         IUserRepository userRepository, 
-        IUnitOfWork unitOfWork, 
         Snowflake snowflake)
     {
         _authorizeUser = authorizeUser;
         _orderRepository = orderRepository;
         _userRepository = userRepository;
-        _unitOfWork = unitOfWork;
         _snowflake = snowflake;
     }
 
@@ -68,9 +64,9 @@ public class ReviewHandler : IRequestHandler<ReviewCommand, Review>
             rating: request.Rating,
             comment: request.Comment);
         
-        // 存檔
-        await _unitOfWork.SaveChangeAsync();
-
+        // 處存變更
+        await _orderRepository.SaveChangeAsync(order);
+        
         return review;
     }
 }
