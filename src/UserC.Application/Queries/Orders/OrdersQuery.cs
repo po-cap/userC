@@ -56,7 +56,13 @@ public class OrdersQueryHandler : IRequestHandler<OrdersQuery, IEnumerable<Order
     {
         if (request.Id != null)
         {
-            var order = await _repository.GetByIdAsync(request.Id.Value);
+            var order = await _repository.GetByIdAsync(
+                request.Id.Value, q => q
+                .Include(x => x.Buyer)
+                .Include(x => x.Seller)
+                .Include(x => x.Shipment)
+                .Include(x => x.Record)
+                .Include(x => x.Amount));
             if(order == null)
                 throw Failure.NotFound();
 
