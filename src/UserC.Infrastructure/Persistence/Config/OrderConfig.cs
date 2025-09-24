@@ -116,6 +116,7 @@ public class OrderConfig :
         builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.UserId).HasColumnName("user_id");
         builder.Property(x => x.OrderId).HasColumnName("order_id");
+        builder.Property(x => x.IsBuyer).HasColumnName("is_buyer");
         builder.Property(x => x.ReviewerAvatar).HasColumnName("reviewer_avatar");
         builder.Property(x => x.ReviewerDisplayName).HasColumnName("reviewer_display_name");
         builder.Property(x => x.Rating).HasColumnName("rating");
