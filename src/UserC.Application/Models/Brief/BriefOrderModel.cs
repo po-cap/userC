@@ -33,6 +33,11 @@ public class BriefOrderModel
     /// 交易價格
     /// </summary>
     public required double TotalAmount { get; set; }
+
+    /// <summary>
+    /// 訂單狀態
+    /// </summary>
+    public required int Status { get; set; }
 }
 
 public static partial class Convertor
@@ -48,7 +53,8 @@ public static partial class Convertor
             DisplayName = isBuyer ? entity.Seller.DisplayName : entity.Buyer.DisplayName,
             Cover = metadata.GetProperty("cover").GetString() ?? "",
             Description = metadata.GetProperty("description").GetString() ?? "",
-            TotalAmount = metadata.GetProperty("totalAmount").GetDouble()
+            TotalAmount = metadata.GetProperty("totalAmount").GetDouble(),
+            Status = (int)entity.Status
         };
     }
 }

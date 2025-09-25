@@ -96,22 +96,13 @@ public static class OrderRoute
     /// </summary>
     /// <param name="context"></param>
     /// <param name="mediator"></param>
-    /// <param name="id">訂單 ID，如果這不為空，代表要訂單細節</param>
-    /// <param name="size"></param>
-    /// <param name="isBuyer"></param>
-    /// <param name="lastId"></param>
-    /// <param name="status">訂單狀態</param>
+    /// <param name="query"></param>
     /// <returns></returns>
     /// <exception cref="Failure"></exception>
     private static async Task<IResult> GetAsync(
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
         [AsParameters]OrdersQuery query)
-        //long? id,
-        //int? size,
-        //bool isBuyer,
-        //long? lastId,
-        //OrderStatus? status)
     {
         var orders = await mediator.SendAsync(query);
         
