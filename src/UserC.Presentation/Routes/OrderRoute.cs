@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
@@ -6,8 +5,6 @@ using UserC.Application.Commands.Orders;
 using UserC.Application.Models.Brief;
 using UserC.Application.Models.Detailed;
 using UserC.Application.Queries.Orders;
-using UserC.Domain.Enums;
-using UserC.Infrastructure.Queries.Orders;
 using UserC.Presentation.Contracts.Items;
 using UserC.Presentation.Utilities;
 
@@ -18,6 +15,7 @@ public static class OrderRoute
     public static void MapOrder(this WebApplication app)
     {
         app.MapGet("/api/order", GetAsync).RequireAuthorization("jwt");
+        app.MapDelete("/api/order", DeleteAsync).RequireAuthorization("jwt");
         
         app.MapPost("/api/order",        AddAsync).RequireAuthorization("jwt");
         app.MapPut( "/api/order/ship",   ShipAsync).RequireAuthorization("jwt");
@@ -27,6 +25,14 @@ public static class OrderRoute
         
         app.MapPut("/api/order/cancel", () => { });
         app.MapPut("/api/order/refund", () => { });
+    }
+
+    private static async Task<IResult> DeleteAsync(
+        [FromServices]IMediator mediator,
+        [AsParameters]DeleteOrderCommand command)
+    {
+        await mediator.SendAsync(command);
+        return Results.Ok();
     }
 
     /// <summary>

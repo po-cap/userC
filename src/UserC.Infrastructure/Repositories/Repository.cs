@@ -68,6 +68,16 @@ public class Repository<T> : IRepository<T> where T : class
     }
 
     /// <summary>
+    /// 刪除
+    /// </summary>
+    /// <param name="entity"></param>
+    public async Task DeleteAsync(T entity)
+    {
+        context.Remove(entity);
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
     /// 變更被追蹤的 Entity
     /// </summary>
     /// <param name="entity">要被變更的實體</param>

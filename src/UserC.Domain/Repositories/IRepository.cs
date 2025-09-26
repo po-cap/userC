@@ -31,6 +31,12 @@ public interface IRepository<T>
     Task<IEnumerable<T>> GetAllAsync(Func<IQueryable<T>, IQueryable<T>>? func = null);
 
     /// <summary>
+    /// 刪除
+    /// </summary>
+    /// <param name="entity"></param>
+    Task DeleteAsync(T entity);
+
+    /// <summary>
     /// 變更被追蹤的 Entity
     /// </summary>
     /// <param name="entity">要被變更的實體</param>
