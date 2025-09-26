@@ -148,6 +148,6 @@ public class Order
             OrderId = Id
         };
 
-        Status = OrderStatus.paid;
+        Status = OrderStatus.refunding;
     }
 }
