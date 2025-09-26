@@ -23,7 +23,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
     public override Task SaveChangeAsync(Order entity)
     {
-        foreach (var review in entity.Reviews)
+        foreach (var review in entity.Reviews ?? [])
         {
             _dbContext.Add(review);
         }
