@@ -133,7 +133,6 @@ public class OrderConfig :
         
         
         builder.Property(x => x.OrderId).HasColumnName("order_id");
-        
         builder.Property(x => x.BankName).HasColumnName("bank_name");
         builder.Property(x => x.BankCode).HasColumnName("bank_code");
         builder.Property(x => x.BankAccount).HasColumnName("bank_account");

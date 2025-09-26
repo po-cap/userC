@@ -62,6 +62,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration<OrderShipment>(orderConfig);
         modelBuilder.ApplyConfiguration<Payment>(orderConfig);
         modelBuilder.ApplyConfiguration<Review>(orderConfig);
+        modelBuilder.ApplyConfiguration<Refund>(orderConfig);
 
         var userConfig = new UserConfig();
         modelBuilder.ApplyConfiguration(userConfig);
