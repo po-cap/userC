@@ -25,6 +25,9 @@ public class OrderRepository : Repository<Order>, IOrderRepository
     {
         if (entity.Reviews != null)
         {
+            // TODO: 實驗看看這行不行？
+            //_dbContext.AttachRange(entity.Reviews);
+            
             foreach (var review in entity.Reviews)
             {
                 _dbContext.Add(review);

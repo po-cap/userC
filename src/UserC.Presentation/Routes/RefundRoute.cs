@@ -18,8 +18,8 @@ public static class RefundRoute
         [FromServices] IMediator mediator,
         [AsParameters] RefundQuery query)
     {
-        await mediator.SendAsync(query);
-        return Results.Ok();
+        var data = await mediator.SendAsync(query);
+        return Results.Ok(data);
     }
     
     private static async Task<IResult> SetAsync(

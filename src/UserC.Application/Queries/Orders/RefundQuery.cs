@@ -9,6 +9,9 @@ namespace UserC.Application.Queries.Orders;
 
 public class RefundQuery : IRequest<Refund>
 {
+    /// <summary>
+    /// 訂單 ID
+    /// </summary>
     public long OrderId { get; set; }
 }
 
