@@ -23,9 +23,12 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
     public override Task SaveChangeAsync(Order entity)
     {
-        foreach (var review in entity.Reviews ?? [])
+        if (entity.Reviews != null)
         {
-            _dbContext.Add(review);
+            foreach (var review in entity.Reviews)
+            {
+                _dbContext.Add(review);
+            }   
         }
         
         return base.SaveChangeAsync(entity);
