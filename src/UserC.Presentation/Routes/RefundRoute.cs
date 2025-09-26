@@ -32,7 +32,7 @@ public static class RefundRoute
     
     private static async Task<IResult> EditAsync(
         [FromServices] IMediator mediator,
-        [AsParameters] EditRefundCommand command)
+        [FromBody] EditRefundCommand command)
     {
         var refund = await mediator.SendAsync(command);
         return Results.Ok(refund);
