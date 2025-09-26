@@ -5,12 +5,12 @@ using UserC.Application.Services;
 using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
-namespace UserC.Application.Commands.Orders;
+namespace UserC.Application.Commands.Orders.Payments;
 
 /// <summary>
 /// 確認收款
 /// </summary>
-public class ConfirmPayCommand : IRequest
+public class ReceivePayCommand : IRequest
 {
     /// <summary>
     /// 訂單 ID
@@ -18,13 +18,13 @@ public class ConfirmPayCommand : IRequest
     public long OrderId { get; set; }
 }
 
-public class ConfirmPayHandler : IRequestHandler<ConfirmPayCommand>
+public class ReceivePayHandler : IRequestHandler<ReceivePayCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IOrderRepository _orderRepository;
     private readonly IAuthorizeUser _authorizeUser;
 
-    public ConfirmPayHandler(
+    public ReceivePayHandler(
         IUnitOfWork unitOfWork, 
         IOrderRepository orderRepository, 
         IAuthorizeUser authorizeUser)
@@ -35,7 +35,7 @@ public class ConfirmPayHandler : IRequestHandler<ConfirmPayCommand>
     }
 
 
-    public async Task HandleAsync(ConfirmPayCommand request)
+    public async Task HandleAsync(ReceivePayCommand request)
     {
         //
         var order = await _orderRepository.GetByIdAsync(

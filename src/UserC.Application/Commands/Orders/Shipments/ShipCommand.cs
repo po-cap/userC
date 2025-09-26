@@ -5,9 +5,12 @@ using UserC.Application.Services;
 using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
-namespace UserC.Application.Commands.Orders;
+namespace UserC.Application.Commands.Orders.Shipments;
 
-public class SetTrackingNumberCommand : IRequest
+/// <summary>
+/// 發貨
+/// </summary>
+public class ShipCommand : IRequest
 {
     /// <summary>
     /// 訂單編號
@@ -25,13 +28,13 @@ public class SetTrackingNumberCommand : IRequest
     public required string TrackingNumber { get; set; }
 }
 
-public class SetTrackingNumberHandler : IRequestHandler<SetTrackingNumberCommand>
+public class ShipHandler : IRequestHandler<ShipCommand>
 {
     private readonly IOrderRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IAuthorizeUser _authorizeUser;
 
-    public SetTrackingNumberHandler(
+    public ShipHandler(
         IOrderRepository repository, 
         IUnitOfWork unitOfWork, 
         IAuthorizeUser authorizeUser)
@@ -42,7 +45,7 @@ public class SetTrackingNumberHandler : IRequestHandler<SetTrackingNumberCommand
     }
 
 
-    public async Task HandleAsync(SetTrackingNumberCommand request)
+    public async Task HandleAsync(ShipCommand request)
     {
         var userId = _authorizeUser.Id;
 

@@ -1,5 +1,6 @@
 using Po.Api.Response;
 using UserC.Application.Commands.Orders;
+using UserC.Application.Commands.Orders.Payments;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Contracts.Orders;
@@ -8,7 +9,7 @@ public class ConfirmPaymentReq;
 
 public static partial class ContractExtension
 {
-    public static ConfirmPayCommand ToCommand(
+    public static ReceivePayCommand ToCommand(
         this ConfirmPaymentReq req,
         IHttpContextAccessor accessor)
     {
@@ -19,7 +20,7 @@ public static partial class ContractExtension
         {
             if (long.TryParse(idValue, out long id))
             {
-                return new ConfirmPayCommand()
+                return new ReceivePayCommand()
                 {
                     OrderId = id,
                 };

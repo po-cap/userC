@@ -33,13 +33,8 @@ public enum OrderStatus : short
     completed = 5,
     
     /// <summary>
-    /// 已取消
-    /// </summary>
-    cancelled = 6,
-    
-    /// <summary>
     /// 申請退款中
     /// </summary>
-    refunding = 7,
+    refunding = 6,
     
 }

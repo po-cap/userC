@@ -6,19 +6,19 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class DeleteOrderCommand : IRequest
+public class OrderDeleteCommand : IRequest
 {
     public long OrderId { get; set; }
 }
 
 
-public class DeleteOrderHandler : IRequestHandler<DeleteOrderCommand>
+public class OrderDeleteHandler : IRequestHandler<OrderDeleteCommand>
 {
     private readonly IOrderRepository _repository;
 
     private readonly IAuthorizeUser _user;
 
-    public DeleteOrderHandler(
+    public OrderDeleteHandler(
         IOrderRepository repository, 
         IAuthorizeUser user)
     {
@@ -26,7 +26,7 @@ public class DeleteOrderHandler : IRequestHandler<DeleteOrderCommand>
         _user = user;
     }
 
-    public async Task HandleAsync(DeleteOrderCommand request)
+    public async Task HandleAsync(OrderDeleteCommand request)
     {
         var order = await _repository.GetByIdAsync(request.OrderId);
         if (order == null)

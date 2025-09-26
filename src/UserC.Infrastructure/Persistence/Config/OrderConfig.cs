@@ -13,7 +13,8 @@ public class OrderConfig :
     IEntityTypeConfiguration<OrderRecord>,
     IEntityTypeConfiguration<OrderShipment>,
     IEntityTypeConfiguration<Payment>,
-    IEntityTypeConfiguration<Review>
+    IEntityTypeConfiguration<Review>,
+    IEntityTypeConfiguration<Refund>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
@@ -45,6 +46,7 @@ public class OrderConfig :
         builder.HasOne(x => x.Record).WithOne().HasForeignKey<OrderRecord>(x => x.OrderId);
         builder.HasOne(x => x.Shipment).WithOne().HasForeignKey<OrderShipment>(x => x.OrderId);
         builder.HasOne(x => x.Payment).WithOne().HasForeignKey<Payment>(x => x.OrderId);
+        builder.HasOne(x => x.Refund).WithOne().HasForeignKey<Refund>(x => x.OrderId);
         
         builder.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.OrderId);
     }
@@ -123,5 +125,29 @@ public class OrderConfig :
         builder.Property(x => x.Rating).HasColumnName("rating");
         builder.Property(x => x.Comment).HasColumnName("comment");
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");
+    }
+
+    public void Configure(EntityTypeBuilder<Refund> builder)
+    {
+        builder.ToTable("orders_refund").HasKey(x => x.OrderId);
+        
+        
+        builder.Property(x => x.OrderId).HasColumnName("order_id");
+        
+        builder.Property(x => x.BankName).HasColumnName("bank_name");
+        builder.Property(x => x.BankCode).HasColumnName("bank_code");
+        builder.Property(x => x.BankAccount).HasColumnName("bank_account");
+        builder.Property(x => x.ReceiveCodeImage).HasColumnName("receive_code_image");
+        builder.Property(x => x.ConfirmPayImage).HasColumnName("confirm_pay_image");
+        
+        builder.Property(x => x.RecipientName).HasColumnName("recipient_name");
+        builder.Property(x => x.RecipientPhone).HasColumnName("recipient_phone");
+        builder.Property(x => x.Address).HasColumnName("address");
+        
+        builder.Property(x => x.ShippingProvider).HasColumnName("shipping_provider");
+        builder.Property(x => x.TrackingNumber).HasColumnName("tracking_number");
+        
+        builder.Property(x => x.ConfirmPickup).HasColumnName("confirm_pickup");
+        builder.Property(x => x.ConfirmReceive).HasColumnName("confirm_receive");
     }
 }

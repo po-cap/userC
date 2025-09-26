@@ -7,7 +7,7 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class ReviewCommand : IRequest<Review>
+public class OrderReviewCommand : IRequest<Review>
 {
     /// <summary>
     /// 訂單 ID
@@ -25,14 +25,14 @@ public class ReviewCommand : IRequest<Review>
     public string Comment { get; set; }
 }
 
-public class ReviewHandler : IRequestHandler<ReviewCommand, Review>
+public class OrderReviewHandler : IRequestHandler<OrderReviewCommand, Review>
 {
     private readonly IAuthorizeUser _authorizeUser;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
     private readonly Snowflake _snowflake;
 
-    public ReviewHandler(
+    public OrderReviewHandler(
         IAuthorizeUser authorizeUser,
         IOrderRepository orderRepository, 
         IUserRepository userRepository, 
@@ -44,7 +44,7 @@ public class ReviewHandler : IRequestHandler<ReviewCommand, Review>
         _snowflake = snowflake;
     }
 
-    public async Task<Review> HandleAsync(ReviewCommand request)
+    public async Task<Review> HandleAsync(OrderReviewCommand request)
     {
         // 取得用戶資料
         var userId = _authorizeUser.Id;

@@ -5,7 +5,7 @@ using UserC.Application.Services;
 using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
-namespace UserC.Application.Commands.Orders;
+namespace UserC.Application.Commands.Orders.Payments;
 
 /// <summary>
 /// 設定收款資訊

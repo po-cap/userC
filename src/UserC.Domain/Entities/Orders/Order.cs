@@ -87,6 +87,12 @@ public class Order
     /// Navigation Property - 評論
     /// </summary>
     public List<Review> Reviews { get; set; }
+
+    /// <summary>
+    /// 退款資訊
+    /// </summary>
+    public Refund Refund { get; set; }
+
     
     /// <summary>
     /// 評論
@@ -123,5 +129,25 @@ public class Order
             ReviewedBySeller = true;
         
         return review;
+    }
+
+    /// <summary>
+    /// 設定退款
+    /// </summary>
+    /// <param name="userId">用戶 ID</param>
+    public void OnRefund(long userId)
+    {
+        if(userId != SellerId && userId != BuyerId)
+            throw Failure.Unauthorized();
+        
+        if (Status == OrderStatus.pending)
+            throw Failure.BadRequest("可以直接刪除訂單");
+
+        Refund = new Refund()
+        {
+            OrderId = Id
+        };
+
+        Status = OrderStatus.paid;
     }
 }

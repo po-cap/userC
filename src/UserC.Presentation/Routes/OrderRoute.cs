@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Commands.Orders;
+using UserC.Application.Commands.Orders.Shipments;
 using UserC.Application.Models.Brief;
 using UserC.Application.Models.Detailed;
 using UserC.Application.Queries.Orders;
@@ -19,17 +20,14 @@ public static class OrderRoute
         
         app.MapPost("/api/order",        AddAsync).RequireAuthorization("jwt");
         app.MapPut( "/api/order/ship",   ShipAsync).RequireAuthorization("jwt");
-        app.MapPut( "/api/order/receive",ReceiveAsync).RequireAuthorization("jwt");
+        app.MapPut( "/api/order/pickup",ReceiveAsync).RequireAuthorization("jwt");
         app.MapPut( "/api/order/review", ReviewAsync).RequireAuthorization("jwt");
         
-        
-        app.MapPut("/api/order/cancel", () => { });
-        app.MapPut("/api/order/refund", () => { });
     }
 
     private static async Task<IResult> DeleteAsync(
         [FromServices]IMediator mediator,
-        [AsParameters]DeleteOrderCommand command)
+        [AsParameters]OrderDeleteCommand command)
     {
         await mediator.SendAsync(command);
         return Results.Ok();
@@ -43,7 +41,7 @@ public static class OrderRoute
     /// <returns></returns>
     private static async Task<IResult> ReviewAsync(
         [FromServices]IMediator mediator,
-        [FromBody] ReviewCommand command)
+        [FromBody] OrderReviewCommand command)
     {
         var review = await mediator.SendAsync(command);
         return Results.Ok(review);
@@ -57,7 +55,7 @@ public static class OrderRoute
     /// <returns></returns>
     private static async Task<IResult> ReceiveAsync(
         [FromServices]IMediator mediator,
-        [AsParameters]ReceivedCommand command)
+        [AsParameters]PickupCommand command)
     {
         await mediator.SendAsync(command);
         return Results.Ok();
@@ -91,7 +89,7 @@ public static class OrderRoute
     private static async Task<IResult> ShipAsync(        
         [FromServices]IHttpContextAccessor context,
         [FromServices]IMediator mediator,
-        [FromBody]SetTrackingNumberCommand command)
+        [FromBody]ShipCommand command)
     {
         await mediator.SendAsync(command);
         return Results.Ok();

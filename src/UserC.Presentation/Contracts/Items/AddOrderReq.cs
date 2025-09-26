@@ -58,9 +58,9 @@ public class AddOrderReq
 
 public static partial class ContractExtension
 {
-    public static AddOrderCommand ToCommand(this AddOrderReq request, long userId)
+    public static OrderAddCommand ToCommand(this AddOrderReq request, long userId)
     {
-        return new AddOrderCommand
+        return new OrderAddCommand
         {
             SellerId       = request.SellerId,
             BuyerId        = userId,

@@ -1,11 +1,10 @@
-using System.Net.Quic;
 using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Services;
 using UserC.Domain.Repositories;
 
-namespace UserC.Application.Commands.Orders;
+namespace UserC.Application.Commands.Orders.Payments;
 
 public class PayCommand : IRequest
 {

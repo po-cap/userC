@@ -7,7 +7,7 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Orders;
 
-public class AddOrderCommand : IRequest<Order>
+public class OrderAddCommand : IRequest<Order>
 {
     /// <summary>
     /// 賣家 ID
@@ -65,13 +65,13 @@ public class AddOrderCommand : IRequest<Order>
     public required string Address { get; set; }
 }
 
-internal class AddOrderHandler : IRequestHandler<AddOrderCommand, Order>
+internal class OrderAddHandler : IRequestHandler<OrderAddCommand, Order>
 {
     private readonly IOrderFactory _orderFactory;
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public AddOrderHandler(
+    public OrderAddHandler(
         IOrderFactory orderFactory, 
         IOrderRepository orderRepository, 
         IUnitOfWork unitOfWork)
@@ -82,7 +82,7 @@ internal class AddOrderHandler : IRequestHandler<AddOrderCommand, Order>
     }
 
 
-    public async Task<Order> HandleAsync(AddOrderCommand request)
+    public async Task<Order> HandleAsync(OrderAddCommand request)
     {
         var order = _orderFactory.New(
             sellerId:       request.SellerId,

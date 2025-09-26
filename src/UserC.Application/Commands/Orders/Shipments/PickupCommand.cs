@@ -5,12 +5,12 @@ using UserC.Application.Services;
 using UserC.Domain.Enums;
 using UserC.Domain.Repositories;
 
-namespace UserC.Application.Commands.Orders;
+namespace UserC.Application.Commands.Orders.Shipments;
 
 /// <summary>
 /// 簽收快遞
 /// </summary>
-public class ReceivedCommand : IRequest
+public class PickupCommand : IRequest
 {
     /// <summary>
     /// 訂單 ID
@@ -18,13 +18,13 @@ public class ReceivedCommand : IRequest
     public long OrderId { get; set; }
 }
 
-public class ReceiveHandler : IRequestHandler<ReceivedCommand>
+public class PickupHandler : IRequestHandler<PickupCommand>
 {
     private readonly IAuthorizeUser _authorizeUser;
     private readonly IOrderRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ReceiveHandler(
+    public PickupHandler(
         IAuthorizeUser authorizeUser,
         IOrderRepository repository, 
         IUnitOfWork unitOfWork)
@@ -35,7 +35,7 @@ public class ReceiveHandler : IRequestHandler<ReceivedCommand>
     }
 
 
-    public async Task HandleAsync(ReceivedCommand request)
+    public async Task HandleAsync(PickupCommand request)
     {
         //
         var order = await _repository.GetByIdAsync(
