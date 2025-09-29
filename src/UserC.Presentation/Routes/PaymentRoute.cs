@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
-using UserC.Application.Commands.Orders;
 using UserC.Application.Commands.Orders.Payments;
 using UserC.Infrastructure.Queries.Orders;
 using UserC.Presentation.Utilities;

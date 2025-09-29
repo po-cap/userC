@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
 using UserC.Application.Models.Detailed;
-using UserC.Domain.Entities.Items;
 using UserC.Infrastructure.Persistence;
 
 namespace UserC.Infrastructure.Queries.Items;

@@ -4,7 +4,10 @@ using UserC.Domain.Entities;
 
 namespace UserC.Infrastructure.Persistence.Config;
 
-public class UserConfig : IEntityTypeConfiguration<User>
+public class UserConfig : 
+    IEntityTypeConfiguration<User>,
+    IEntityTypeConfiguration<Favorite>,
+    IEntityTypeConfiguration<Follow>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -14,5 +17,34 @@ public class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.Avatar).HasColumnName("avatar");
         builder.Property(x => x.DisplayName).HasColumnName("display_name");
         builder.Property(x => x.Banner).HasColumnName("banner");
+    }
+
+    public void Configure(EntityTypeBuilder<Favorite> builder)
+    {
+        builder.ToTable("favorites").HasKey(x => new { x.UserId, x.ItemId });
+        
+        builder.Property(x => x.UserId).HasColumnName("user_id");
+        builder.Property(x => x.ItemId).HasColumnName("item_id");
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at");
+
+        builder.HasOne(x => x.Item).WithMany().HasForeignKey(x => x.ItemId);
+        builder.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
+        //var favorites = await context.Favorites
+        //    .Where(f => f.UserId == userId)
+        //    .Include(f => f.Product)  // 直接包含商品
+        //    .Select(f => f.Product)
+        //    .ToListAsync();
+    }
+
+    public void Configure(EntityTypeBuilder<Follow> builder)
+    {
+        builder.ToTable("follows").HasKey(x => new { x.FollowerId, x.FollowingId });
+        
+        builder.Property(x => x.FollowerId).HasColumnName("follower_id");
+        builder.Property(x => x.FollowingId).HasColumnName("following_id");
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at");
+
+        builder.HasOne(x => x.Following).WithMany().HasForeignKey(x => x.FollowingId);
+        builder.HasOne<User>().WithMany().HasForeignKey(x => x.FollowerId);
     }
 }

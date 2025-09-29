@@ -65,8 +65,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration<Refund>(orderConfig);
 
         var userConfig = new UserConfig();
-        modelBuilder.ApplyConfiguration(userConfig);
-        
+        modelBuilder.ApplyConfiguration<User>(userConfig);
+        modelBuilder.ApplyConfiguration<Favorite>(userConfig);
+        modelBuilder.ApplyConfiguration<Follow>(userConfig);
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

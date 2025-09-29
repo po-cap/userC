@@ -1,4 +1,3 @@
-using Amazon.Runtime.Internal;
 using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;

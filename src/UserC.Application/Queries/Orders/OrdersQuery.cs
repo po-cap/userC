@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
-using UserC.Application.Models.Brief;
 using UserC.Application.Services;
 using UserC.Domain.Entities.Orders;
 using UserC.Domain.Enums;

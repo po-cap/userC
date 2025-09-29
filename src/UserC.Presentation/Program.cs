@@ -25,8 +25,11 @@ builder.Configuration
     .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
-
 var OIDC = builder.Configuration["OIDC"];
+
+builder.PoLog();
+
+
 
 builder.Services
        .AddHttpContextAccessor()
@@ -234,7 +237,7 @@ var app = builder.Build();
 
     app.UseAuthentication();   // 確認身份
     app.UseAuthorization();    // 確認權限
-    //app.UseExceptionHandle();  // 處理 Error 發生時的 Response
+    app.UseExceptionHandle();  // 處理 Error 發生時的 Response
 
     app.MapProfile();          // 用戶資料相關  API
     app.MapLogin();            // 登入相關 API

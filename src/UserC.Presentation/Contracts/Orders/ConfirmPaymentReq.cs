@@ -1,7 +1,5 @@
 using Po.Api.Response;
-using UserC.Application.Commands.Orders;
 using UserC.Application.Commands.Orders.Payments;
-using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Contracts.Orders;
 
