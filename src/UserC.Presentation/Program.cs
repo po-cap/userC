@@ -221,9 +221,6 @@ builder.Services.AddAuthorization(o =>
     });
 });
 
-
-
-
 var app = builder.Build();
 {
     app.UseForwardedHeaders(new ForwardedHeadersOptions
