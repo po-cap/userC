@@ -6,8 +6,8 @@ public static class LoginRoute
 {
     public static void MapLogin(this WebApplication app)
     {
-        app.MapGet("/api/login/xiao_hong_mao", XiaoHongMao);
-        app.MapGet("/api/login/line", Line);
+        app.MapGet("/api/login/xiao_hong_mao", XiaoHongMao).AllowAnonymous();
+        app.MapGet("/api/login/line", Line).AllowAnonymous();
     }
     
     
