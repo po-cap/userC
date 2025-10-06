@@ -10,8 +10,8 @@ public static class ProfileRoute
 {
     public static void MapProfile(this WebApplication app)
     {
-        app.MapGet("/api/profile/{userId:long}", GetAsync).RequireAuthorization("jwt");
-        app.MapPut("/api/profile", EditAsync).RequireAuthorization("jwt");
+        app.MapGet("/api/profile/{userId:long}", GetAsync);
+        app.MapPut("/api/profile", EditAsync);
     }
 
     /// <summary>

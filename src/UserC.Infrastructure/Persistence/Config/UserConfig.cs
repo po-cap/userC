@@ -17,6 +17,8 @@ public class UserConfig :
         builder.Property(x => x.Avatar).HasColumnName("avatar");
         builder.Property(x => x.DisplayName).HasColumnName("display_name");
         builder.Property(x => x.Banner).HasColumnName("banner");
+
+        //builder.HasMany(x => x.Favorites).WithOne().HasForeignKey(x => x.UserId);
     }
 
     public void Configure(EntityTypeBuilder<Favorite> builder)
@@ -28,7 +30,8 @@ public class UserConfig :
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");
 
         builder.HasOne(x => x.Item).WithMany().HasForeignKey(x => x.ItemId);
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
+        builder.HasOne<User>().WithMany(x => x.Favorites).HasForeignKey(x => x.UserId);
+        
         //var favorites = await context.Favorites
         //    .Where(f => f.UserId == userId)
         //    .Include(f => f.Product)  // 直接包含商品

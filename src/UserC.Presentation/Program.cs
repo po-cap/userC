@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -213,6 +214,14 @@ builder.Services.AddAuthentication("cookie")
 
 builder.Services.AddAuthorization(o =>
 {
+    // 以下說明一下 default 和 fallback 區別
+    //     FallbackPolicy - 保护所有未明确配置授权的端点
+    //     DefaultPolicy  - 当使用 [Authorize] 但没有指定策略名称时使用
+    o.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes("jwt")
+        .RequireAuthenticatedUser()
+        .Build();
+    
     o.AddPolicy("jwt", b =>
     {
         b.RequireAuthenticatedUser()
@@ -244,5 +253,6 @@ var app = builder.Build();
     app.MapChat();             // 聊天相關 API
     app.MapPayment();          // 付款相關 API
     app.MapRefund();           // 退款(貨)相關 API
+    app.MapFavorite();         // 收藏相關 API
     app.Run();
 }

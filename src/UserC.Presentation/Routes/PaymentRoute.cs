@@ -11,10 +11,10 @@ public static class PaymentRoute
 {
     public static void MapPayment(this WebApplication app)
     {
-        app.MapGet("/api/payment", GetAsync).RequireAuthorization("jwt");
-        app.MapPut("/api/payment/set", SetAsync).RequireAuthorization("jwt");
-        app.MapPut("/api/payment/pay", PayAsync).RequireAuthorization("jwt");
-        app.MapPut("/api/payment/confirm", ConfirmAsync).RequireAuthorization("jwt");
+        app.MapGet("/api/payment",         GetAsync);
+        app.MapPut("/api/payment/set",     SetAsync);
+        app.MapPut("/api/payment/pay",     PayAsync);
+        app.MapPut("/api/payment/confirm", ConfirmAsync);
     }
     
     /// <summary>

@@ -9,9 +9,9 @@ public static class RefundRoute
 {
     public static void MapRefund(this WebApplication app)
     {
-        app.MapGet("/api/refund",GetAsync).RequireAuthorization("jwt");
-        app.MapPost("/api/refund", SetAsync).RequireAuthorization("jwt");
-        app.MapPut("/api/refund", EditAsync).RequireAuthorization("jwt");
+        app.MapGet("/api/refund",  GetAsync);
+        app.MapPost("/api/refund", SetAsync);
+        app.MapPut("/api/refund",  EditAsync);
     }
 
     private static async Task<IResult> GetAsync(

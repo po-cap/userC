@@ -15,13 +15,13 @@ public static class OrderRoute
 {
     public static void MapOrder(this WebApplication app)
     {
-        app.MapGet("/api/order", GetAsync).RequireAuthorization("jwt");
-        app.MapDelete("/api/order", DeleteAsync).RequireAuthorization("jwt");
+        app.MapGet("/api/order",         GetAsync);
+        app.MapDelete("/api/order",      DeleteAsync);
         
-        app.MapPost("/api/order",        AddAsync).RequireAuthorization("jwt");
-        app.MapPut( "/api/order/ship",   ShipAsync).RequireAuthorization("jwt");
-        app.MapPut( "/api/order/pickup",ReceiveAsync).RequireAuthorization("jwt");
-        app.MapPut( "/api/order/review", ReviewAsync).RequireAuthorization("jwt");
+        app.MapPost("/api/order",        AddAsync);
+        app.MapPut( "/api/order/ship",   ShipAsync);
+        app.MapPut( "/api/order/pickup", ReceiveAsync);
+        app.MapPut( "/api/order/review", ReviewAsync);
         
     }
 

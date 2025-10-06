@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.Mediator.Interface;
 using UserC.Application.Commands.Assets;
-using UserC.Presentation.Contracts;
 using UserC.Presentation.Utilities;
 
 namespace UserC.Presentation.Routes;
@@ -10,8 +9,8 @@ public static class AssetsRoute
 {
     public static void MapAssets(this WebApplication app)
     {
-        app.MapPost("/api/image",ImageAsync).RequireAuthorization("jwt").DisableAntiforgery();
-        app.MapPost("/api/video",VideoAsync).RequireAuthorization("jwt").DisableAntiforgery();
+        app.MapPost("/api/image",ImageAsync).DisableAntiforgery();
+        app.MapPost("/api/video",VideoAsync).DisableAntiforgery();
     }
     
     private static async Task<IResult> ImageAsync( 

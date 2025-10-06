@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Po.Api.Response" Version="1.0.7" />
+    <PackageReference Include="Po.Api.Response" Version="1.0.9" />
   </ItemGroup>
 
 </Project>

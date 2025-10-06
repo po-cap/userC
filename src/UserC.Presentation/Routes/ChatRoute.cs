@@ -10,7 +10,7 @@ public static class ChatRoute
 {
     public static void MapChat(this WebApplication app)
     {
-        app.MapGet("/api/chat",GetAsync).RequireAuthorization("jwt");
+        app.MapGet("/api/chat",GetAsync);
     }
     
     private static async Task<IResult> GetAsync(

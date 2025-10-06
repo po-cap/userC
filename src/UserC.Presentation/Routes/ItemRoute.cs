@@ -12,8 +12,8 @@ public static class ItemRoute
 {
     public static void MapItem(this WebApplication app)
     {
-        app.MapPost("/api/item", AddAsync).RequireAuthorization("jwt");
-        app.MapGet("/api/item", GetAsync);
+        app.MapPost("/api/item", AddAsync);
+        app.MapGet("/api/item", GetAsync).AllowAnonymous();
     }
     
     
