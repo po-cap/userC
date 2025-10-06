@@ -9,11 +9,27 @@ public static class FavoriteRoute
 {
     public static void MapFavorite(this WebApplication app)
     {
-        app.MapGet("/api/favorites",    GetAsync);    // 获取我的收藏列表(或是否已收藏某商品)
-        app.MapPost("/api/favorites",   AddAsync);    // 收藏商品
-        app.MapDelete("/api/favorites", RemoveAsync); // 取消收藏
+        app.MapGet("/api/favorites",    GetAsync);                 // 获取我的收藏列表(或是否已收藏某商品)
+        app.MapPost("/api/favorites",   AddAsync);                 // 收藏商品
+        app.MapDelete("/api/favorites", RemoveAsync);              // 取消收藏
+        app.MapGet("/api/favorites/{itemId}/status", StatusAsync); // 查看商品是否收藏過
     }
 
+    /// <summary>
+    /// 查看商品是否收藏過
+    /// </summary>
+    /// <param name="mediator"></param>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
+    private static async Task<IResult> StatusAsync(
+        [FromServices]IMediator mediator,
+        [FromRoute]long itemId)
+    {
+        var result = await mediator.SendAsync(new FavoriteStatusQuery() { ItemId = itemId });
+        return Results.Ok(result);
+    }
+    
+    
     /// <summary>
     /// 获取我的收藏列表(或是否已收藏某商品)
     /// </summary>

@@ -7,6 +7,9 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Queries;
  
+/// <summary>
+/// 获取我的收藏列表(或是否已收藏某商品)
+/// </summary>
 public class FavoriteQuery : IRequest<IEnumerable<BriefItemModel>>
 {
     /// <summary>
