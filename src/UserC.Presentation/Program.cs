@@ -254,5 +254,6 @@ var app = builder.Build();
     app.MapPayment();          // 付款相關 API
     app.MapRefund();           // 退款(貨)相關 API
     app.MapFavorite();         // 收藏相關 API
+    app.MapFollow();           // 關注相關 API
     app.Run();
 }
