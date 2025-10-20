@@ -3,7 +3,7 @@ using UserC.Domain.Entities.Items;
 
 namespace UserC.Domain.Repositories;
 
-public interface IItemRepository
+public interface IItemRepository : IRepository<Item>
 {
     void Add(Item item);
 }

@@ -1,9 +1,7 @@
 using System.Text.Json;
 using UserC.Application.Services;
-using UserC.Domain.Entities;
 using UserC.Domain.Entities.Items;
 using UserC.Domain.Factories;
-using UserC.Infrastructure.Services;
 
 namespace UserC.Infrastructure.Factories;
 

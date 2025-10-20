@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Po.Api.Response;
 using Shared.Mediator.Interface;
+using UserC.Application.Commands.Items;
 using UserC.Application.Models.Brief;
 using UserC.Infrastructure.Queries.Items;
 using UserC.Presentation.Contracts;
@@ -12,8 +13,26 @@ public static class ItemRoute
 {
     public static void MapItem(this WebApplication app)
     {
-        app.MapPost("/api/item", AddAsync);
-        app.MapGet("/api/item", GetAsync).AllowAnonymous();
+        app.MapPut ("/api/item/album", EditAlbumAsync);
+        app.MapPost("/api/item",       AddAsync);
+        app.MapGet ("/api/item",       GetAsync).AllowAnonymous();
+    }
+
+    /// <summary>
+    /// 編輯相簿
+    /// 1) 變更順序
+    /// 2) 新增照片
+    /// 3) 刪除照片
+    /// </summary>
+    /// <param name="mediator"></param>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private static async Task<IResult> EditAlbumAsync(
+        [FromServices]IMediator mediator,
+        [AsParameters]EditAlbumCommand command)
+    {
+        await mediator.SendAsync(command);
+        return Results.Ok();
     }
     
     

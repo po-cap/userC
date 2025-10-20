@@ -4,6 +4,24 @@ namespace UserC.Domain.Entities.Items;
 
 public class SKU
 {
+    public static SKU New(
+        long id,
+        string name, 
+        JsonDocument spec,
+        double price, 
+        int quantity)
+    {
+        return new SKU
+        {
+            Id = id,
+            Name = name,
+            Metadata = spec,
+            Price = price,
+            AvailableStock = quantity,
+            AllocatedStock = 0,
+        };
+    }
+    
     /// <summary>
     /// 庫存單元 ID
     /// </summary>

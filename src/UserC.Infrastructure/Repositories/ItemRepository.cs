@@ -5,11 +5,11 @@ using UserC.Infrastructure.Persistence;
 
 namespace UserC.Infrastructure.Repositories;
 
-public class ItemRepository : IItemRepository
+public class ItemRepository : Repository<Item>, IItemRepository
 {
     private readonly AppDbContext _dbContext;
 
-    public ItemRepository(AppDbContext dbContext)
+    public ItemRepository(AppDbContext dbContext) : base(dbContext)
     {
         _dbContext = dbContext;
     }

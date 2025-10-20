@@ -10,8 +10,7 @@ public static class FavoriteRoute
     public static void MapFavorite(this WebApplication app)
     {
         app.MapGet("/api/favorites",    GetAsync);                 // 获取我的收藏列表(或是否已收藏某商品)
-        app.MapPost("/api/favorites",   AddAsync);                 // 收藏商品
-        app.MapDelete("/api/favorites", RemoveAsync);              // 取消收藏
+        app.MapPost("/api/favorites",   AddAsync);                 // (取消)收藏商品
         app.MapGet("/api/favorites/{itemId}/status", StatusAsync); // 查看商品是否收藏過
     }
 
@@ -44,19 +43,6 @@ public static class FavoriteRoute
         return Results.Ok(items);
     }
     
-    /// <summary>
-    /// 取消收藏
-    /// </summary>
-    /// <param name="mediator"></param>
-    /// <param name="command"></param>
-    /// <returns></returns>
-    private static async Task<IResult> RemoveAsync(
-        [FromServices]IMediator mediator,
-        [AsParameters]RemoveFromFavoriteCmd command)
-    {
-        await mediator.SendAsync(command);
-        return Results.Ok();
-    }
     
     /// <summary>
     /// 收藏

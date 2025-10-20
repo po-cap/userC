@@ -37,12 +37,22 @@ public class AddToFavoriteHandler : IRequestHandler<AddToFavoriteCmd>
     public async Task HandleAsync(AddToFavoriteCmd request)
     {
         // explain
-        var user = await _repository.GetByIdAsync(_user.Id, q => q.Include(x => x.Favorites));
+        var user = await _repository.GetByIdAsync(
+            _user.Id, 
+            q => q.Include(x => x.Favorites));
         if(user == null)
             throw Failure.NotFound();
-        
-        // explain
-        user.AddToFavorite(itemId: request.ItemId, userId: user.Id);
+
+        // 如果已經收藏了，就取消收藏
+        if (user.Favorites.FirstOrDefault(x => x.ItemId == request.ItemId) != null)
+        {
+            user.RemoveFromFavorite(itemId: request.ItemId, userId: user.Id);
+        }
+        // 如果還沒收藏，就收藏
+        else
+        {
+            user.AddToFavorite(itemId: request.ItemId, userId: user.Id);
+        }
 
         // explain
         await _repository.SaveChangeAsync(user);
