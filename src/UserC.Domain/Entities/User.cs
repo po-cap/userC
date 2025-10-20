@@ -28,6 +28,11 @@ public class User
     public ICollection<Favorite> Favorites { get; set; }
 
     /// <summary>
+    /// Navigation Property - 關注對象
+    /// </summary>
+    public ICollection<Follow> Followings { get; set; }
+
+    /// <summary>
     /// 收藏
     /// </summary>
     public void AddToFavorite(long itemId, long userId)

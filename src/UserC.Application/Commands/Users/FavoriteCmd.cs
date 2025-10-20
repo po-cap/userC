@@ -6,7 +6,7 @@ using UserC.Domain.Repositories;
 
 namespace UserC.Application.Commands.Users;
 
-public class AddToFavoriteCmd : IRequest
+public class FavoriteCmd : IRequest
 {
     /// <summary>
     /// 商品 ID
@@ -14,7 +14,7 @@ public class AddToFavoriteCmd : IRequest
     public long ItemId { get; set; }
 }
 
-public class AddToFavoriteHandler : IRequestHandler<AddToFavoriteCmd>
+public class FavoriteHandler : IRequestHandler<FavoriteCmd>
 {
     /// <summary>
     /// 認證用戶
@@ -26,7 +26,7 @@ public class AddToFavoriteHandler : IRequestHandler<AddToFavoriteCmd>
     /// </summary>
     private readonly IUserRepository _repository;
 
-    public AddToFavoriteHandler(
+    public FavoriteHandler(
         IAuthorizeUser user, 
         IUserRepository repository)
     {
@@ -34,7 +34,7 @@ public class AddToFavoriteHandler : IRequestHandler<AddToFavoriteCmd>
         _repository = repository;
     }
     
-    public async Task HandleAsync(AddToFavoriteCmd request)
+    public async Task HandleAsync(FavoriteCmd request)
     {
         // explain
         var user = await _repository.GetByIdAsync(

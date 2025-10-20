@@ -52,7 +52,7 @@ public static class FavoriteRoute
     /// <returns></returns>
     private static async Task<IResult> AddAsync(
         [FromServices]IMediator mediator,
-        [AsParameters]AddToFavoriteCmd command)
+        [AsParameters]FavoriteCmd command)
     {
         await mediator.SendAsync(command);
         return Results.Ok();

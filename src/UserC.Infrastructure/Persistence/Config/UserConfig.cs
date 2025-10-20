@@ -31,12 +31,6 @@ public class UserConfig :
 
         builder.HasOne(x => x.Item).WithMany().HasForeignKey(x => x.ItemId);
         builder.HasOne<User>().WithMany(x => x.Favorites).HasForeignKey(x => x.UserId);
-        
-        //var favorites = await context.Favorites
-        //    .Where(f => f.UserId == userId)
-        //    .Include(f => f.Product)  // 直接包含商品
-        //    .Select(f => f.Product)
-        //    .ToListAsync();
     }
 
     public void Configure(EntityTypeBuilder<Follow> builder)
@@ -48,6 +42,6 @@ public class UserConfig :
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");
 
         builder.HasOne(x => x.Following).WithMany().HasForeignKey(x => x.FollowingId);
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.FollowerId);
+        builder.HasOne<User>().WithMany(x => x.Followings).HasForeignKey(x => x.FollowerId);
     }
 }
