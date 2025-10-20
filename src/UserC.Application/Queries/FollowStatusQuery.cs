@@ -43,6 +43,6 @@ public class FollowStatusQueryHandler : IRequestHandler<FollowStatusQuery, bool>
             throw Failure.NotFound();
 
 
-        return user.Favorites.Any(x => x.ItemId == request.FollowingId);
+        return user.Followings.Any(x => x.FollowingId == request.FollowingId);
     }
 }
